@@ -374,10 +374,10 @@ const BOOM_COLORS = {
 };
 
 const BOOM_LABELS = {
-  water:       'Add Water',
-  air:         'Open to Air',
-  fire:        'Apply a Flame',
-  oxidizer:    'It IS the Oxidizer',
+  water:       'Water',
+  air:         'Air',
+  fire:        'Fire',
+  oxidizer:    'Explodes Others',
   radioactive: 'On Its Own',
   stable:      'Not Explosive',
 };
