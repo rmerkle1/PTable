@@ -70,7 +70,6 @@ export const CATEGORY_COLORS = {
   'noble-gas':             PALETTE.pink,    // not adjacent to alkali metals
   'lanthanide':            PALETTE.teal,    // separate row from post-transition
   'actinide':              PALETTE.grey,
-  'unknown':               PALETTE.grey,
 };
 
 export const CATEGORY_LABELS = {
@@ -84,7 +83,6 @@ export const CATEGORY_LABELS = {
   'noble-gas':             'Noble Gas',
   'lanthanide':            'Lanthanide',
   'actinide':              'Actinide',
-  'unknown':               'Unknown',
 };
 
 // ─── "Can I lick it?" data ───────────────────────────────────────────────────
