@@ -12,6 +12,7 @@ const PROPS = [
 ];
 
 const lickLayer = colorLayerById['lick'];
+const boomLayer = colorLayerById['boom'];
 
 export default function ElementPanel({ element, onClose }) {
   if (!element) return null;
@@ -23,6 +24,10 @@ export default function ElementPanel({ element, onClose }) {
   const lickLabel       = lickLayer.getRatingLabel(element);
   const lickDescription = lickLayer.getRatingDescription(element);
   const lickColor       = lickLayer.getColor(element);
+
+  const boomLabel       = boomLayer.getRatingLabel(element);
+  const boomDescription = boomLayer.getRatingDescription(element);
+  const boomColor       = boomLayer.getColor(element);
 
   return (
     <div className="fixed right-0 top-0 h-full w-72 bg-gray-900 border-l border-white/10 shadow-2xl flex flex-col z-50 overflow-y-auto">
@@ -51,6 +56,14 @@ export default function ElementPanel({ element, onClose }) {
         <div className="text-[10px] text-white/40 uppercase tracking-widest mb-1">Can I lick it?</div>
         <div className="text-base font-bold" style={{ color: lickColor }}>{lickLabel}</div>
         <div className="text-xs text-white/50 mt-1 leading-snug">{lickDescription}</div>
+      </div>
+
+      {/* How to make it explode */}
+      <div className="mx-4 mt-3 rounded-lg p-3 border"
+           style={{ borderColor: `${boomColor}55`, backgroundColor: `${boomColor}18` }}>
+        <div className="text-[10px] text-white/40 uppercase tracking-widest mb-1">How to make it explode</div>
+        <div className="text-base font-bold" style={{ color: boomColor }}>{boomLabel}</div>
+        <div className="text-xs text-white/50 mt-1 leading-snug">{boomDescription}</div>
       </div>
 
       {/* Properties */}

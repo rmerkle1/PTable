@@ -235,6 +235,162 @@ const LICK_DESCRIPTIONS = {
   unknown: 'Insufficient data — we literally cannot test most of these',
 };
 
+// ─── "How to Make it Explode" data ───────────────────────────────────────────
+// water      = reacts violently/explosively with water
+// air        = pyrophoric — ignites spontaneously in air
+// fire       = flammable — burns explosively when ignited
+// oxidizer   = powerful oxidizer — causes other things to combust violently
+// radioactive = nuclear decay or criticality risk (on its own)
+// stable     = not particularly explosive under normal conditions
+
+const BOOM = {
+  1:   'fire',        // H  — hydrogen gas explodes with O₂
+  2:   'stable',      // He — noble gas
+  3:   'water',       // Li — reacts vigorously with water
+  4:   'fire',        // Be — burns brilliantly when ignited
+  5:   'stable',      // B  — stable under normal conditions
+  6:   'stable',      // C  — stable under normal conditions
+  7:   'stable',      // N  — N₂ is chemically inert
+  8:   'oxidizer',    // O  — pure O₂ causes violent combustion
+  9:   'oxidizer',    // F  — most powerful oxidizer known; ignites almost everything
+  10:  'stable',      // Ne — noble gas
+  11:  'water',       // Na — classic water explosion (the YouTube video)
+  12:  'fire',        // Mg — burns brilliantly; used in incendiary devices
+  13:  'fire',        // Al — thermite (Al + Fe₂O₃); powder dust explosions
+  14:  'stable',      // Si — inert
+  15:  'air',         // P  — white phosphorus ignites spontaneously in air
+  16:  'fire',        // S  — burns; historically used in gunpowder
+  17:  'oxidizer',    // Cl — powerful oxidizer; forms explosive compounds with fuels
+  18:  'stable',      // Ar — noble gas
+  19:  'water',       // K  — more violent water reaction than Na
+  20:  'water',       // Ca — reacts with water, producing flammable H₂
+  21:  'stable',      // Sc — stable metal
+  22:  'fire',        // Ti — titanium powder/dust fires; burns even in N₂
+  23:  'stable',      // V  — stable metal
+  24:  'stable',      // Cr — stable metal
+  25:  'stable',      // Mn — stable metal
+  26:  'fire',        // Fe — steel wool ignites easily; key fuel in thermite
+  27:  'stable',      // Co — stable metal
+  28:  'stable',      // Ni — stable metal
+  29:  'stable',      // Cu — stable metal
+  30:  'fire',        // Zn — zinc dust fires; used in smoke and incendiary devices
+  31:  'stable',      // Ga — stable metal
+  32:  'stable',      // Ge — stable metalloid
+  33:  'fire',        // As — burns with a blue flame; used in early explosives
+  34:  'fire',        // Se — burns when ignited
+  35:  'oxidizer',    // Br — liquid bromine is a strong oxidizer
+  36:  'stable',      // Kr — noble gas
+  37:  'water',       // Rb — more violent than K with water
+  38:  'water',       // Sr — reacts with water, producing H₂
+  39:  'stable',      // Y  — stable metal
+  40:  'air',         // Zr — pyrophoric as fine powder; used in early flash photography
+  41:  'stable',      // Nb — stable metal
+  42:  'stable',      // Mo — stable metal
+  43:  'radioactive', // Tc — all isotopes are radioactive; no stable form
+  44:  'stable',      // Ru — stable metal
+  45:  'stable',      // Rh — stable metal
+  46:  'stable',      // Pd — stable metal
+  47:  'stable',      // Ag — stable metal
+  48:  'stable',      // Cd — stable metal
+  49:  'stable',      // In — stable metal
+  50:  'stable',      // Sn — stable metal
+  51:  'fire',        // Sb — fine powder is flammable; historically used in incendiaries
+  52:  'stable',      // Te — stable metalloid
+  53:  'stable',      // I  — elemental I₂ is not explosive
+  54:  'stable',      // Xe — noble gas
+  55:  'water',       // Cs — most dramatic alkali metal water reaction; nearly instantaneous
+  56:  'water',       // Ba — reacts with water; barium is more reactive than strontium
+  57:  'air',         // La — pyrophoric; fine turnings ignite in air
+  58:  'air',         // Ce — pyrophoric; the active ingredient in ferrocerium fire starters
+  59:  'air',         // Pr — pyrophoric metal
+  60:  'air',         // Nd — pyrophoric; used in magnets but dangerous as fine powder
+  61:  'radioactive', // Pm — radioactive; no stable isotopes exist
+  62:  'fire',        // Sm — flammable as fine powder
+  63:  'water',       // Eu — reacts with water like the alkaline earth metals
+  64:  'fire',        // Gd — flammable as fine powder
+  65:  'fire',        // Tb — flammable as fine powder
+  66:  'fire',        // Dy — flammable as fine powder
+  67:  'fire',        // Ho — flammable as fine powder
+  68:  'fire',        // Er — flammable as fine powder
+  69:  'fire',        // Tm — flammable as fine powder
+  70:  'fire',        // Yb — flammable as fine powder
+  71:  'stable',      // Lu — stable metal
+  72:  'air',         // Hf — pyrophoric powder; used in flash photography and armor-piercing rounds
+  73:  'stable',      // Ta — extremely stable; used in chemical plant linings
+  74:  'stable',      // W  — most refractory metal; stable to extreme temps
+  75:  'stable',      // Re — stable metal
+  76:  'stable',      // Os — stable metal (though OsO₄ fumes are hazardous)
+  77:  'stable',      // Ir — stable metal
+  78:  'stable',      // Pt — stable metal
+  79:  'stable',      // Au — completely inert
+  80:  'stable',      // Hg — not flammable; toxic but not explosive as element
+  81:  'stable',      // Tl — stable metal
+  82:  'stable',      // Pb — stable metal
+  83:  'stable',      // Bi — stable metal
+  84:  'radioactive', // Po — highly radioactive; used to assassinate Alexander Litvinenko
+  85:  'radioactive', // At — radioactive halogen; extremely rare
+  86:  'radioactive', // Rn — radioactive gas; seeps from ground into buildings
+  87:  'radioactive', // Fr — half-life of 22 minutes; too radioactive to accumulate
+  88:  'radioactive', // Ra — famously radioactive; 1,600-year half-life
+  89:  'radioactive', // Ac — radioactive actinide
+  90:  'radioactive', // Th — radioactive heavy metal; potential nuclear fuel
+  91:  'radioactive', // Pa — radioactive; rare and highly toxic
+  92:  'radioactive', // U  — fissile material; used in nuclear weapons and reactors
+  93:  'radioactive', // Np — radioactive; first transuranic element discovered
+  94:  'radioactive', // Pu — fissile; nuclear weapons; also pyrophoric
+  95:  'radioactive', // Am — radioactive; found in smoke detectors
+  96:  'radioactive', // Cm — radioactive; very high specific activity
+  97:  'radioactive', // Bk — radioactive
+  98:  'radioactive', // Cf — radioactive; used as a neutron source
+  99:  'radioactive', // Es — radioactive; named after Einstein
+  100: 'radioactive', // Fm — radioactive; named after Fermi
+  101: 'radioactive', // Md — radioactive
+  102: 'radioactive', // No — radioactive
+  103: 'radioactive', // Lr — radioactive
+  104: 'radioactive', // Rf — radioactive superheavy
+  105: 'radioactive', // Db — radioactive superheavy
+  106: 'radioactive', // Sg — radioactive superheavy
+  107: 'radioactive', // Bh — radioactive superheavy
+  108: 'radioactive', // Hs — radioactive superheavy
+  109: 'radioactive', // Mt — radioactive superheavy
+  110: 'radioactive', // Ds — radioactive superheavy
+  111: 'radioactive', // Rg — radioactive superheavy
+  112: 'radioactive', // Cn — radioactive superheavy
+  113: 'radioactive', // Nh — radioactive superheavy
+  114: 'radioactive', // Fl — radioactive superheavy
+  115: 'radioactive', // Mc — radioactive superheavy
+  116: 'radioactive', // Lv — radioactive superheavy
+  117: 'radioactive', // Ts — radioactive superheavy
+  118: 'radioactive', // Og — radioactive superheavy
+};
+
+const BOOM_COLORS = {
+  water:       PALETTE.blue,
+  air:         PALETTE.yellow,
+  fire:        PALETTE.pink,
+  oxidizer:    PALETTE.teal,
+  radioactive: PALETTE.purple,
+  stable:      PALETTE.grey,
+};
+
+const BOOM_LABELS = {
+  water:       'Add Water',
+  air:         'Open to Air',
+  fire:        'Apply a Flame',
+  oxidizer:    'It IS the Oxidizer',
+  radioactive: 'On Its Own',
+  stable:      'Not Explosive',
+};
+
+const BOOM_DESCRIPTIONS = {
+  water:       'Reacts violently or explosively on contact with water',
+  air:         'Pyrophoric — ignites spontaneously when exposed to air',
+  fire:        'Flammable — burns explosively when ignited by a spark or flame',
+  oxidizer:    'Powerful oxidizer — causes other materials to combust or explode violently',
+  radioactive: 'Radioactive decay or nuclear criticality — it explodes on its own terms',
+  stable:      'Not particularly explosive under normal conditions',
+};
+
 // ─── Layer factories ──────────────────────────────────────────────────────────
 function makeGradientLayer({ id, label, property, unit, scale, description, format }) {
   const values = elements.map(e => e[property]).filter(v => v !== null && v !== undefined && isFinite(v));
@@ -296,6 +452,31 @@ export const colorLayers = [
     },
     getRatingDescription(element) {
       return LICK_DESCRIPTIONS[LICK[element.number] ?? 'unknown'];
+    },
+  },
+  {
+    id: 'boom',
+    label: 'How to Make it Explode',
+    description: 'How to get this element to go boom — educational purposes only',
+    type: 'category',
+    legendItems: Object.entries(BOOM_LABELS).map(([key, label]) => ({
+      key, label, color: BOOM_COLORS[key], description: BOOM_DESCRIPTIONS[key],
+    })),
+    getColor(element) {
+      const rating = BOOM[element.number] ?? 'stable';
+      return BOOM_COLORS[rating];
+    },
+    getRating(element) {
+      return BOOM[element.number] ?? 'stable';
+    },
+    getRatingLabel(element) {
+      return BOOM_LABELS[BOOM[element.number] ?? 'stable'];
+    },
+    getRatingDescription(element) {
+      return BOOM_DESCRIPTIONS[BOOM[element.number] ?? 'stable'];
+    },
+    getNote(element) {
+      return null; // per-element notes stored in BOOM comments
     },
   },
   makeGradientLayer({
