@@ -94,14 +94,14 @@ export const CATEGORY_LABELS = {
 // unknown = genuinely insufficient data
 
 const LICK = {
-  1:   'unknown', // H  — gas; harmless but unlickable
+  1:   'sure',    // H  — H₂ gas is completely harmless; inert at physiological conditions
   2:   'sure',    // He — inert noble gas
   3:   'nah',     // Li — explodes in contact with mouth moisture
   4:   'nah',     // Be — toxic & carcinogenic
   5:   'meh',     // B  — low but nonzero toxicity
   6:   'sure',    // C  — charcoal/graphite; even used medicinally
-  7:   'unknown', // N  — gas; non-toxic but unlickable
-  8:   'unknown', // O  — gas; unlickable
+  7:   'sure',    // N  — N₂ makes up 78% of air; completely non-toxic
+  8:   'sure',    // O  — O₂ is required for life; breathing it is fine
   9:   'nah',     // F  — will literally dissolve your tongue
   10:  'sure',    // Ne — inert noble gas
   11:  'nah',     // Na — explosive with saliva
@@ -109,19 +109,19 @@ const LICK = {
   13:  'sure',    // Al — used in cookware, antacids; very low toxicity
   14:  'sure',    // Si — basically sand; biologically inert
   15:  'nah',     // P  — white phosphorus ignites; red P still toxic
-  16:  'meh',     // S  — mild irritant; relatively low toxicity
+  16:  'sure',    // S  — elemental sulfur is used in supplements and fungicides; very low acute toxicity
   17:  'nah',     // Cl — toxic gas
   18:  'sure',    // Ar — inert noble gas
   19:  'nah',     // K  — more explosive with water than Na
   20:  'meh',     // Ca — essential element; reacts with saliva but slowly
-  21:  'unknown', // Sc — limited human toxicology data
+  21:  'sure',    // Sc — low acute toxicity; no established adverse effects from brief contact
   22:  'sure',    // Ti — used in dental and surgical implants
-  23:  'nah',     // V  — toxic; disrupts enzyme systems
+  23:  'meh',     // V  — pure metal has lower acute toxicity than vanadium compounds; chronic exposure is the main concern
   24:  'meh',     // Cr — Cr(III) is an essential trace nutrient; pure metal is less toxic than Cr(VI) compounds
   25:  'meh',     // Mn — essential trace element; neurotoxic in excess
   26:  'sure',    // Fe — essential; iron filings in cereal
   27:  'meh',     // Co — essential (vitamin B12) but toxic in excess
-  28:  'nah',     // Ni — known carcinogen and common allergen
+  28:  'meh',     // Ni — pure metal brief contact is low acute risk; allergen for ~15% of people, carcinogen risk is from chronic inhalation of dust
   29:  'meh',     // Cu — essential trace element; toxic in large amounts
   30:  'meh',     // Zn — essential; too much causes nausea
   31:  'meh',     // Ga — low toxicity; melts in your hand (and mouth)
@@ -131,18 +131,18 @@ const LICK = {
   35:  'nah',     // Br — corrosive liquid; toxic fumes
   36:  'sure',    // Kr — inert noble gas
   37:  'nah',     // Rb — reacts violently with water
-  38:  'nah',     // Sr — reactive; soluble Sr compounds are toxic
-  39:  'unknown', // Y  — limited human data
+  38:  'meh',     // Sr — less reactive than K/Rb; strontium ranelate used as an osteoporosis drug; soluble salts are more concerning than the metal
+  39:  'sure',    // Y  — low acute toxicity; similar profile to Sc; no established hazard from brief contact
   40:  'sure',    // Zr — biocompatible; used in dental crowns
   41:  'meh',     // Nb — low toxicity; used in medical-grade alloys
   42:  'meh',     // Mo — essential trace element; low acute toxicity
   43:  'nah',     // Tc — all isotopes are radioactive
-  44:  'meh',     // Ru — low toxicity as bulk metal
-  45:  'meh',     // Rh — low toxicity
-  46:  'meh',     // Pd — moderate toxicity; some compounds irritating
-  47:  'meh',     // Ag — low acute toxicity; repeated exposure causes argyria
+  44:  'sure',    // Ru — bulk metal has very low toxicity; Ru compounds are different
+  45:  'sure',    // Rh — very low toxicity as bulk metal
+  46:  'meh',     // Pd — moderate toxicity; some Pd salts are sensitizers
+  47:  'sure',    // Ag — used in wound dressings and edible applications; very low acute toxicity as pure metal
   48:  'nah',     // Cd — highly toxic; causes itai-itai disease
-  49:  'nah',     // In — moderately toxic; affects kidneys
+  49:  'meh',     // In — moderate acute toxicity; brief contact with solid indium is low risk
   50:  'meh',     // Sn — inorganic tin has low toxicity
   51:  'nah',     // Sb — toxic heavy metal
   52:  'nah',     // Te — toxic; causes months-long garlic breath
@@ -165,12 +165,12 @@ const LICK = {
   69:  'unknown', // Tm — lanthanide; limited data
   70:  'unknown', // Yb — lanthanide; limited data
   71:  'unknown', // Lu — lanthanide; limited data
-  72:  'unknown', // Hf — limited human toxicology; low acute toxicity suspected
+  72:  'meh',     // Hf — low acute toxicity; used in some biomedical contexts; limited systemic data
   73:  'sure',    // Ta — biocompatible; used in surgical implants and sutures
-  74:  'meh',     // W  — low systemic toxicity; tungsten carbide is more concerning
-  75:  'unknown', // Re — very limited data
+  74:  'sure',    // W  — very low systemic toxicity as pure metal; one of the least toxic heavy metals
+  75:  'meh',     // Re — limited data; expected low acute toxicity based on its chemical inertness
   76:  'nah',     // Os — oxidizes to OsO₄ on surface, which is extremely toxic
-  77:  'meh',     // Ir — low toxicity as bulk metal
+  77:  'sure',    // Ir — very low toxicity as bulk metal; used in medical electrodes
   78:  'sure',    // Pt — generally inert as pure metal; Pt compounds are another story
   79:  'sure',    // Au — completely inert; edible gold leaf is a thing
   80:  'nah',     // Hg — neurotoxin; liquid at room temp makes it extra dangerous
