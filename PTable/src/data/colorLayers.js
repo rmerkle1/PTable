@@ -146,7 +146,7 @@ const LICK = {
   50:  'meh',     // Sn — inorganic tin has low toxicity
   51:  'nah',     // Sb — toxic heavy metal
   52:  'nah',     // Te — toxic; causes months-long garlic breath
-  53:  'meh',     // I  — essential trace element; pure I₂ is irritating
+  53:  'nah',     // I  — pure I₂ crystals are corrosive to mucous membranes; causes chemical burns
   54:  'sure',    // Xe — inert; used as an anesthetic
   55:  'nah',     // Cs — more reactive than K; also mildly radioactive (natural Cs-137)
   56:  'nah',     // Ba — soluble Ba compounds are highly toxic
@@ -279,7 +279,7 @@ export const colorLayers = [
   {
     id: 'lick',
     label: 'Can I Lick It?',
-    description: 'Safety of briefly licking a pure sample',
+    description: 'Brief contact with pure element — based on ATSDR/NIOSH acute toxicology data. Assumes bulk solid/liquid at STP. Not medical advice.',
     type: 'category',
     legendItems: Object.entries(LICK_LABELS).map(([key, label]) => ({
       key, label, color: LICK_COLORS[key], description: LICK_DESCRIPTIONS[key],
@@ -355,7 +355,7 @@ export const colorLayers = [
   makeGradientLayer({
     id: 'atomicRadius',
     label: 'Atomic Radius',
-    description: 'Atomic radius (pm)',
+    description: 'Van der Waals radius (pm) — Alvarez (2013) Dalton Trans. 42, 8617',
     property: 'atomicRadius',
     unit: 'pm',
     scale: SCALE_COOL_WARM,
