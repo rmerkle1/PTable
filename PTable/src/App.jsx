@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { colorLayers, CATEGORY_COLORS, CATEGORY_LABELS } from './data/colorLayers';
+import { colorLayers } from './data/colorLayers';
 import TableLayout from './layouts/TableLayout';
 import LongFormLayout from './layouts/LongFormLayout';
 import SpiralLayout from './layouts/SpiralLayout';
@@ -34,13 +34,13 @@ function GradientLegend({ layer }) {
   );
 }
 
-function CategoryLegend() {
+function CategoryLegend({ items }) {
   return (
     <div className="flex flex-wrap gap-x-4 gap-y-1">
-      {Object.entries(CATEGORY_COLORS).map(([key, color]) => (
+      {items.map(({ key, label, color }) => (
         <div key={key} className="flex items-center gap-1.5">
           <div className="w-2.5 h-2.5 rounded-sm flex-shrink-0" style={{ backgroundColor: color }} />
-          <span className="text-[10px] text-white/50">{CATEGORY_LABELS[key]}</span>
+          <span className="text-[10px] text-white/50">{label}</span>
         </div>
       ))}
     </div>
@@ -99,7 +99,9 @@ export default function App() {
       <div className="px-5 py-2 border-b border-white/5 bg-gray-900/30 flex items-center gap-4 flex-wrap shrink-0">
         <span className="text-[11px] text-white/25 whitespace-nowrap">{layer.description}</span>
         <div className="flex-1 min-w-0">
-          {layer.type === 'gradient' ? <GradientLegend layer={layer} /> : <CategoryLegend />}
+          {layer.type === 'gradient'
+            ? <GradientLegend layer={layer} />
+            : <CategoryLegend items={layer.legendItems} />}
         </div>
         {selectedElement && (
           <div className="text-xs text-white/60">
