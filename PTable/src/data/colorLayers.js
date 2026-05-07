@@ -389,6 +389,275 @@ const BOOM_DESCRIPTIONS = {
   stable:      'Not particularly explosive under normal conditions',
 };
 
+// ─── "Gen Chem Relevance" data ────────────────────────────────────────────────
+// definitely = 75-100% chance of appearing in a first-year gen chem course
+// good       = 50-75%
+// maybe      = 25-50%
+// forget     = 0-25%  (default for anything not listed)
+
+const GEN_CHEM = {
+  1:   'definitely', // H  — acids, water, gases, everything
+  2:   'definitely', // He — noble gas, electron configuration
+  3:   'definitely', // Li — Group 1 example, lithium batteries
+  4:   'good',       // Be — BeCl₂ (linear, exception to octet rule)
+  5:   'good',       // B  — BF₃ (Lewis acid, trigonal planar)
+  6:   'definitely', // C  — organic intro, CO₂, carbonates
+  7:   'definitely', // N  — N₂, ammonia synthesis, nitrates
+  8:   'definitely', // O  — oxidation states, combustion, water
+  9:   'definitely', // F  — most electronegative, HF acid
+  10:  'definitely', // Ne — noble gas, periodic trends
+  11:  'definitely', // Na — NaOH, NaCl, sodium chemistry
+  12:  'definitely', // Mg — Mg²⁺, Group 2 example
+  13:  'definitely', // Al — amphoteric oxide, metals/alloys
+  14:  'definitely', // Si — SiO₂, semiconductors, silicates
+  15:  'definitely', // P  — phosphates, PCl₅, Lewis structures
+  16:  'definitely', // S  — H₂SO₄, S₈, sulfuric acid
+  17:  'definitely', // Cl — Cl₂, HCl, halogens, chloride ions
+  18:  'definitely', // Ar — noble gas, inert atmosphere
+  19:  'definitely', // K  — K⁺, potassium salts, Group 1
+  20:  'definitely', // Ca — CaCO₃, hard water, Ca²⁺
+  21:  'maybe',      // Sc — first d-block element, periodic trends
+  22:  'good',       // Ti — TiO₂ (white paint), transition metal
+  23:  'good',       // V  — multiple oxidation states, vanadium catalyst
+  24:  'good',       // Cr — chromate/dichromate redox; Cr²⁺/³⁺/⁶⁺
+  25:  'good',       // Mn — KMnO₄ (lab reagent), permanganate redox
+  26:  'definitely', // Fe — Fe²⁺/³⁺, rust, steel, hemoglobin
+  27:  'good',       // Co — Co²⁺/³⁺, crystal field theory, cobalt blue
+  28:  'good',       // Ni — Ni²⁺, electroplating, Ni-Cd battery
+  29:  'definitely', // Cu — Cu⁺/²⁺, electrochemistry demo, copper wire
+  30:  'definitely', // Zn — Zn²⁺, galvanic cells, zinc battery
+  31:  'maybe',      // Ga — semiconductor, melts at body temperature
+  32:  'maybe',      // Ge — semiconductor, Mendeleev's eka-silicon prediction
+  33:  'maybe',      // As — arsenic poisoning, metalloid
+  34:  'maybe',      // Se — trace element, metalloid
+  35:  'definitely', // Br — Br₂ (liquid halogen), HBr, bromides
+  36:  'definitely', // Kr — noble gas, periodic trends
+  37:  'good',       // Rb — Group 1 periodic trends
+  38:  'good',       // Sr — flame tests (crimson), Group 2
+  39:  'maybe',      // Y  — ytterite minerals, periodic trends
+  40:  'maybe',      // Zr — ZrO₂ ceramics, nuclear reactor cladding
+  41:  'maybe',      // Nb — superconductors, niobium alloys
+  42:  'maybe',      // Mo — multiple oxidation states, MoS₂ lubricant
+  43:  'maybe',      // Tc — first synthetic element; Mendeleev gap; nuclear medicine
+  44:  'maybe',      // Ru — catalysts, platinum group
+  45:  'maybe',      // Rh — catalytic converters, platinum group
+  46:  'maybe',      // Pd — H₂ absorption, cross-coupling catalysis
+  47:  'good',       // Ag — Ag⁺, AgNO₃, Ksp reactions, photography
+  48:  'good',       // Cd — CdS (quantum dots, pigment), Ni-Cd battery
+  49:  'maybe',      // In — indium tin oxide (ITO)
+  50:  'good',       // Sn — Sn²⁺/⁴⁺, tin cans, solder, allotropes of tin
+  51:  'maybe',      // Sb — flame retardants, antimony compounds
+  52:  'maybe',      // Te — thermoelectrics, telluride compounds
+  53:  'definitely', // I  — I₂ crystals, HI, halogens, iodides
+  54:  'definitely', // Xe — noble gas, XeF₄ (exceptions to octet rule)
+  55:  'good',       // Cs — atomic clock, Group 1 periodic trends
+  56:  'definitely', // Ba — Ba²⁺, BaSO₄ (insoluble salt), flame tests
+  57:  'maybe',      // La — lanthanide series intro
+  58:  'maybe',      // Ce — ferrocerium fire starters, lanthanide
+  60:  'maybe',      // Nd — Nd magnets (strongest permanent magnets)
+  63:  'maybe',      // Eu — phosphors in fluorescent lighting and screens
+  64:  'maybe',      // Gd — MRI contrast agents
+  72:  'maybe',      // Hf — nuclear reactors, hafnium in CPUs
+  73:  'maybe',      // Ta — tantalum capacitors, surgical implants
+  74:  'maybe',      // W  — tungsten filament, highest melting point of metals
+  78:  'good',       // Pt — platinum electrode, catalytic converter
+  79:  'good',       // Au — noble metal, electrochemistry, gold leaf
+  80:  'good',       // Hg — liquid metal, barometer, thermometer (historical)
+  81:  'maybe',      // Tl — thallium poisoning (Agatha Christie)
+  82:  'definitely', // Pb — Pb-acid battery, historical toxicology, alloys
+  83:  'maybe',      // Bi — Pepto-Bismol, low-toxicity heavy metal
+  84:  'maybe',      // Po — polonium, Marie Curie, radioactivity
+  86:  'maybe',      // Rn — radon gas, indoor radioactivity, lung cancer
+  88:  'maybe',      // Ra — radium, Marie Curie, historical radioactivity
+  90:  'maybe',      // Th — thorium, nuclear fuel, Welsbach gas mantles
+  92:  'good',       // U  — nuclear fission, U-235, uranium hexafluoride
+  94:  'maybe',      // Pu — plutonium, nuclear weapons, nuclear power
+  95:  'maybe',      // Am — americium in smoke detectors (Am-241)
+};
+
+const GEN_CHEM_COLORS = {
+  definitely: PALETTE.green,
+  good:       PALETTE.teal,
+  maybe:      PALETTE.yellow,
+  forget:     PALETTE.grey,
+};
+
+const GEN_CHEM_LABELS = {
+  definitely: 'Definitely Know',
+  good:       'Good to Know',
+  maybe:      'Maybe',
+  forget:     'Forget It',
+};
+
+const GEN_CHEM_DESCRIPTIONS = {
+  definitely: '75–100% — appears in virtually every gen chem course',
+  good:       '50–75% — likely covered, especially in lab or application topics',
+  maybe:      '25–50% — may appear in nuclear, materials, or specialty sections',
+  forget:     '0–25% — rarely if ever tested in a first-year chemistry course',
+};
+
+// ─── "Natural Habitat" data ───────────────────────────────────────────────────
+// air   = primarily found as a component of Earth's atmosphere
+// ocean = primarily dissolved in seawater or freshwater
+// life  = most strongly associated with biological organisms
+// rock  = found in Earth's crust, minerals, or ores  (default for natural elements)
+// lab   = synthetic; must be made in a reactor or accelerator  (default for Z≥93)
+
+const HABITAT = {
+  // air ─────────────────────────────────────────────────────────────────────
+  2:   'air',    // He — trace noble gas from radioactive decay in crust
+  7:   'air',    // N  — 78% of the atmosphere
+  8:   'air',    // O  — 21% of the atmosphere
+  10:  'air',    // Ne — trace noble gas in atmosphere
+  18:  'air',    // Ar — 0.9% of the atmosphere
+  36:  'air',    // Kr — trace noble gas in atmosphere
+  54:  'air',    // Xe — trace noble gas in atmosphere
+  86:  'air',    // Rn — seeps from radioactive minerals into air and basements
+
+  // ocean ───────────────────────────────────────────────────────────────────
+  1:   'ocean',  // H  — water
+  5:   'ocean',  // B  — dissolved as boric acid in seawater
+  11:  'ocean',  // Na — most abundant cation in seawater
+  12:  'ocean',  // Mg — second most abundant cation in seawater
+  17:  'ocean',  // Cl — most abundant anion in seawater
+  35:  'ocean',  // Br — extracted commercially from seawater
+  38:  'ocean',  // Sr — dissolved in seawater; incorporated by marine organisms
+  53:  'ocean',  // I  — concentrated in seawater and marine algae
+
+  // life ────────────────────────────────────────────────────────────────────
+  6:   'life',   // C  — the backbone of all organic molecules and living things
+  15:  'life',   // P  — DNA backbone, ATP energy currency, bones and teeth
+  27:  'life',   // Co — the metal at the core of vitamin B12
+  30:  'life',   // Zn — essential cofactor in hundreds of enzymes
+  34:  'life',   // Se — selenocysteine, selenoproteins, antioxidant enzymes
+  42:  'life',   // Mo — nitrogenase enzyme (nitrogen fixation)
+
+  // lab (synthetic — no stable isotopes) ───────────────────────────────────
+  43:  'lab',    // Tc — first synthetic element; no stable isotopes
+  61:  'lab',    // Pm — no stable isotopes
+  // elements 93–118 default to 'lab' in getRating
+};
+
+const HABITAT_COLORS = {
+  air:   PALETTE.blue,
+  ocean: PALETTE.teal,
+  life:  PALETTE.green,
+  rock:  PALETTE.grey,
+  lab:   PALETTE.purple,
+};
+
+const HABITAT_LABELS = {
+  air:   'Atmosphere',
+  ocean: 'Ocean / Water',
+  life:  'Living Things',
+  rock:  'Rocks & Minerals',
+  lab:   'Lab Only',
+};
+
+const HABITAT_DESCRIPTIONS = {
+  air:   'Found primarily as a component of Earth\'s atmosphere',
+  ocean: 'Found primarily dissolved in seawater or freshwater',
+  life:  'Most strongly associated with biological organisms',
+  rock:  'Found in Earth\'s crust, minerals, or ores',
+  lab:   'Synthetic — must be created in a nuclear reactor or particle accelerator',
+};
+
+// ─── Earth's crust abundance (ppm by mass) ───────────────────────────────────
+// Source: Yaroshevsky (2006); CRC Handbook of Chemistry and Physics
+// Displayed on a log₁₀ scale. Null = no stable isotopes / immeasurably trace.
+
+const ABUNDANCE_PPM = {
+  1:   1400,     // H
+  2:   0.008,    // He
+  3:   20,       // Li
+  4:   2.8,      // Be
+  5:   10,       // B
+  6:   200,      // C
+  7:   19,       // N
+  8:   461000,   // O
+  9:   585,      // F
+  10:  0.005,    // Ne
+  11:  23600,    // Na
+  12:  23300,    // Mg
+  13:  82300,    // Al
+  14:  282000,   // Si
+  15:  1050,     // P
+  16:  350,      // S
+  17:  145,      // Cl
+  18:  3.5,      // Ar
+  19:  20900,    // K
+  20:  41500,    // Ca
+  21:  22,       // Sc
+  22:  5650,     // Ti
+  23:  120,      // V
+  24:  102,      // Cr
+  25:  950,      // Mn
+  26:  56300,    // Fe
+  27:  25,       // Co
+  28:  84,       // Ni
+  29:  60,       // Cu
+  30:  70,       // Zn
+  31:  19,       // Ga
+  32:  1.5,      // Ge
+  33:  1.8,      // As
+  34:  0.05,     // Se
+  35:  2.4,      // Br
+  36:  0.0001,   // Kr
+  37:  90,       // Rb
+  38:  370,      // Sr
+  39:  33,       // Y
+  40:  165,      // Zr
+  41:  20,       // Nb
+  42:  1.2,      // Mo
+  44:  0.001,    // Ru
+  45:  0.001,    // Rh
+  46:  0.015,    // Pd
+  47:  0.075,    // Ag
+  48:  0.15,     // Cd
+  49:  0.25,     // In
+  50:  2.3,      // Sn
+  51:  0.2,      // Sb
+  52:  0.001,    // Te
+  53:  0.45,     // I
+  54:  0.00002,  // Xe
+  55:  3,        // Cs
+  56:  425,      // Ba
+  57:  39,       // La
+  58:  66.5,     // Ce
+  59:  9.2,      // Pr
+  60:  41.5,     // Nd
+  62:  7.1,      // Sm
+  63:  2.0,      // Eu
+  64:  6.2,      // Gd
+  65:  1.1,      // Tb
+  66:  5.2,      // Dy
+  67:  1.3,      // Ho
+  68:  3.5,      // Er
+  69:  0.5,      // Tm
+  70:  3.2,      // Yb
+  71:  0.8,      // Lu
+  72:  3,        // Hf
+  73:  2,        // Ta
+  74:  1.25,     // W
+  75:  0.0007,   // Re
+  76:  0.002,    // Os
+  77:  0.001,    // Ir
+  78:  0.005,    // Pt
+  79:  0.004,    // Au
+  80:  0.085,    // Hg
+  81:  0.85,     // Tl
+  82:  14,       // Pb
+  83:  0.025,    // Bi
+  90:  9.6,      // Th
+  91:  1.3,      // Pa
+  92:  2.7,      // U
+  // Tc(43), Pm(61), Po(84), At(85), Rn(86), Fr(87), Ra(88), Ac(89): null (trace/synthetic)
+  // Elements 93-118: null (synthetic)
+};
+
+const ABUNDANCE_LOG_MIN = -4;                  // 0.0001 ppm floor
+const ABUNDANCE_LOG_MAX = Math.log10(461000);  // ~5.66
+
 // ─── Layer factories ──────────────────────────────────────────────────────────
 function makeGradientLayer({ id, label, property, unit, scale, description, format }) {
   const values = elements.map(e => e[property]).filter(v => v !== null && v !== undefined && isFinite(v));
@@ -475,6 +744,69 @@ export const colorLayers = [
     },
     getNote(element) {
       return null; // per-element notes stored in BOOM comments
+    },
+  },
+  {
+    id: 'genchem',
+    label: 'Gen Chem Relevance',
+    description: 'How likely is this element to appear in a first-year general chemistry course?',
+    type: 'category',
+    legendItems: Object.entries(GEN_CHEM_LABELS).map(([key, label]) => ({
+      key, label, color: GEN_CHEM_COLORS[key], description: GEN_CHEM_DESCRIPTIONS[key],
+    })),
+    getColor(element) {
+      return GEN_CHEM_COLORS[GEN_CHEM[element.number] ?? 'forget'];
+    },
+    getRating(element) {
+      return GEN_CHEM[element.number] ?? 'forget';
+    },
+    getRatingLabel(element) {
+      return GEN_CHEM_LABELS[GEN_CHEM[element.number] ?? 'forget'];
+    },
+    getRatingDescription(element) {
+      return GEN_CHEM_DESCRIPTIONS[GEN_CHEM[element.number] ?? 'forget'];
+    },
+  },
+  {
+    id: 'habitat',
+    label: 'Natural Habitat',
+    description: 'Where in nature is this element most likely to be found?',
+    type: 'category',
+    legendItems: Object.entries(HABITAT_LABELS).map(([key, label]) => ({
+      key, label, color: HABITAT_COLORS[key], description: HABITAT_DESCRIPTIONS[key],
+    })),
+    getColor(element) {
+      const r = element.number >= 93 ? 'lab' : (HABITAT[element.number] ?? 'rock');
+      return HABITAT_COLORS[r];
+    },
+    getRating(element) {
+      return element.number >= 93 ? 'lab' : (HABITAT[element.number] ?? 'rock');
+    },
+    getRatingLabel(element) {
+      const r = element.number >= 93 ? 'lab' : (HABITAT[element.number] ?? 'rock');
+      return HABITAT_LABELS[r];
+    },
+    getRatingDescription(element) {
+      const r = element.number >= 93 ? 'lab' : (HABITAT[element.number] ?? 'rock');
+      return HABITAT_DESCRIPTIONS[r];
+    },
+  },
+  {
+    id: 'abundance',
+    label: 'Earth Abundance',
+    description: "Abundance in Earth's crust (ppm by mass, log scale) — Yaroshevsky (2006)",
+    type: 'gradient',
+    unit: 'ppm',
+    min: 0.0001,
+    max: 461000,
+    getColor(element) {
+      const v = ABUNDANCE_PPM[element.number];
+      if (v == null) return '#1e2535';
+      const t = (Math.log10(v) - ABUNDANCE_LOG_MIN) / (ABUNDANCE_LOG_MAX - ABUNDANCE_LOG_MIN);
+      return interpolateColor(SCALE_COOL_WARM, Math.max(0, Math.min(1, t)));
+    },
+    getLegendColor(t) {
+      return interpolateColor(SCALE_COOL_WARM, t);
     },
   },
   makeGradientLayer({
