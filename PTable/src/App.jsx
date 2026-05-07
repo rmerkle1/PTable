@@ -2,14 +2,20 @@ import { useState } from 'react';
 import { colorLayers } from './data/colorLayers';
 import TableLayout from './layouts/TableLayout';
 import LongFormLayout from './layouts/LongFormLayout';
-import SpiralLayout from './layouts/SpiralLayout';
+import BenfeyLayout from './layouts/BenfeyLayout';
+import AdomahLayout from './layouts/AdomahLayout';
+import ZigguratLayout from './layouts/ZigguratLayout';
+import RibbonLayout from './layouts/RibbonLayout';
 import ElementPanel from './components/ElementPanel';
 import './App.css';
 
 const MODES = [
-  { id: 'standard', label: 'Standard Table' },
-  { id: 'longform', label: 'Long Form' },
-  { id: 'spiral',   label: 'Radial' },
+  { id: 'standard',  label: 'Standard' },
+  { id: 'longform',  label: 'Long Form' },
+  { id: 'benfey',    label: 'Benfey Spiral' },
+  { id: 'adomah',    label: 'Adomah' },
+  { id: 'ziggurat',  label: 'Ziggurat' },
+  { id: 'ribbon',    label: 'Left-Step' },
 ];
 
 function GradientLegend({ layer }) {
@@ -116,9 +122,9 @@ export default function App() {
         className="flex-1 flex items-center justify-center p-4 overflow-auto transition-[padding] duration-300"
         style={selectedElement ? { paddingRight: '300px' } : {}}
       >
-        {mode === 'spiral' ? (
+        {mode === 'benfey' ? (
           <div className="w-full" style={{ height: 'calc(100vh - 112px)' }}>
-            <SpiralLayout
+            <BenfeyLayout
               colorLayer={layer}
               selectedElement={selectedElement}
               onSelect={handleSelect}
@@ -127,6 +133,28 @@ export default function App() {
         ) : mode === 'longform' ? (
           <div className="overflow-x-auto w-full flex justify-center">
             <LongFormLayout
+              colorLayer={layer}
+              selectedElement={selectedElement}
+              onSelect={handleSelect}
+            />
+          </div>
+        ) : mode === 'adomah' ? (
+          <div className="overflow-x-auto w-full flex justify-center">
+            <AdomahLayout
+              colorLayer={layer}
+              selectedElement={selectedElement}
+              onSelect={handleSelect}
+            />
+          </div>
+        ) : mode === 'ziggurat' ? (
+          <ZigguratLayout
+            colorLayer={layer}
+            selectedElement={selectedElement}
+            onSelect={handleSelect}
+          />
+        ) : mode === 'ribbon' ? (
+          <div className="overflow-x-auto w-full flex justify-center">
+            <RibbonLayout
               colorLayer={layer}
               selectedElement={selectedElement}
               onSelect={handleSelect}
