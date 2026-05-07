@@ -390,110 +390,106 @@ const BOOM_DESCRIPTIONS = {
 };
 
 // ─── "Gen Chem Relevance" data ────────────────────────────────────────────────
-// definitely = 75-100% chance of appearing in a first-year gen chem course
-// good       = 50-75%
-// maybe      = 25-50%
-// forget     = 0-25%  (default for anything not listed)
+// know   = likely to appear in a first-year gen chem course
+// maybe  = 25-50% chance — specialty or niche topics
+// forget = rarely if ever in gen chem  (default for anything not listed)
 
 const GEN_CHEM = {
-  1:   'definitely', // H  — acids, water, gases, everything
-  2:   'definitely', // He — noble gas, electron configuration
-  3:   'definitely', // Li — Group 1 example, lithium batteries
-  4:   'good',       // Be — BeCl₂ (linear, exception to octet rule)
-  5:   'good',       // B  — BF₃ (Lewis acid, trigonal planar)
-  6:   'definitely', // C  — organic intro, CO₂, carbonates
-  7:   'definitely', // N  — N₂, ammonia synthesis, nitrates
-  8:   'definitely', // O  — oxidation states, combustion, water
-  9:   'definitely', // F  — most electronegative, HF acid
-  10:  'definitely', // Ne — noble gas, periodic trends
-  11:  'definitely', // Na — NaOH, NaCl, sodium chemistry
-  12:  'definitely', // Mg — Mg²⁺, Group 2 example
-  13:  'definitely', // Al — amphoteric oxide, metals/alloys
-  14:  'definitely', // Si — SiO₂, semiconductors, silicates
-  15:  'definitely', // P  — phosphates, PCl₅, Lewis structures
-  16:  'definitely', // S  — H₂SO₄, S₈, sulfuric acid
-  17:  'definitely', // Cl — Cl₂, HCl, halogens, chloride ions
-  18:  'definitely', // Ar — noble gas, inert atmosphere
-  19:  'definitely', // K  — K⁺, potassium salts, Group 1
-  20:  'definitely', // Ca — CaCO₃, hard water, Ca²⁺
-  21:  'maybe',      // Sc — first d-block element, periodic trends
-  22:  'good',       // Ti — TiO₂ (white paint), transition metal
-  23:  'good',       // V  — multiple oxidation states, vanadium catalyst
-  24:  'good',       // Cr — chromate/dichromate redox; Cr²⁺/³⁺/⁶⁺
-  25:  'good',       // Mn — KMnO₄ (lab reagent), permanganate redox
-  26:  'definitely', // Fe — Fe²⁺/³⁺, rust, steel, hemoglobin
-  27:  'good',       // Co — Co²⁺/³⁺, crystal field theory, cobalt blue
-  28:  'good',       // Ni — Ni²⁺, electroplating, Ni-Cd battery
-  29:  'definitely', // Cu — Cu⁺/²⁺, electrochemistry demo, copper wire
-  30:  'definitely', // Zn — Zn²⁺, galvanic cells, zinc battery
-  31:  'maybe',      // Ga — semiconductor, melts at body temperature
-  32:  'maybe',      // Ge — semiconductor, Mendeleev's eka-silicon prediction
-  33:  'maybe',      // As — arsenic poisoning, metalloid
-  34:  'maybe',      // Se — trace element, metalloid
-  35:  'definitely', // Br — Br₂ (liquid halogen), HBr, bromides
-  36:  'definitely', // Kr — noble gas, periodic trends
-  37:  'good',       // Rb — Group 1 periodic trends
-  38:  'good',       // Sr — flame tests (crimson), Group 2
-  39:  'maybe',      // Y  — ytterite minerals, periodic trends
-  40:  'maybe',      // Zr — ZrO₂ ceramics, nuclear reactor cladding
-  41:  'maybe',      // Nb — superconductors, niobium alloys
-  42:  'maybe',      // Mo — multiple oxidation states, MoS₂ lubricant
-  43:  'maybe',      // Tc — first synthetic element; Mendeleev gap; nuclear medicine
-  44:  'maybe',      // Ru — catalysts, platinum group
-  45:  'maybe',      // Rh — catalytic converters, platinum group
-  46:  'maybe',      // Pd — H₂ absorption, cross-coupling catalysis
-  47:  'good',       // Ag — Ag⁺, AgNO₃, Ksp reactions, photography
-  48:  'good',       // Cd — CdS (quantum dots, pigment), Ni-Cd battery
-  49:  'maybe',      // In — indium tin oxide (ITO)
-  50:  'good',       // Sn — Sn²⁺/⁴⁺, tin cans, solder, allotropes of tin
-  51:  'maybe',      // Sb — flame retardants, antimony compounds
-  52:  'maybe',      // Te — thermoelectrics, telluride compounds
-  53:  'definitely', // I  — I₂ crystals, HI, halogens, iodides
-  54:  'definitely', // Xe — noble gas, XeF₄ (exceptions to octet rule)
-  55:  'good',       // Cs — atomic clock, Group 1 periodic trends
-  56:  'definitely', // Ba — Ba²⁺, BaSO₄ (insoluble salt), flame tests
-  57:  'maybe',      // La — lanthanide series intro
-  58:  'maybe',      // Ce — ferrocerium fire starters, lanthanide
-  60:  'maybe',      // Nd — Nd magnets (strongest permanent magnets)
-  63:  'maybe',      // Eu — phosphors in fluorescent lighting and screens
-  64:  'maybe',      // Gd — MRI contrast agents
-  72:  'maybe',      // Hf — nuclear reactors, hafnium in CPUs
-  73:  'maybe',      // Ta — tantalum capacitors, surgical implants
-  74:  'maybe',      // W  — tungsten filament, highest melting point of metals
-  78:  'good',       // Pt — platinum electrode, catalytic converter
-  79:  'good',       // Au — noble metal, electrochemistry, gold leaf
-  80:  'good',       // Hg — liquid metal, barometer, thermometer (historical)
-  81:  'maybe',      // Tl — thallium poisoning (Agatha Christie)
-  82:  'definitely', // Pb — Pb-acid battery, historical toxicology, alloys
-  83:  'maybe',      // Bi — Pepto-Bismol, low-toxicity heavy metal
-  84:  'maybe',      // Po — polonium, Marie Curie, radioactivity
-  86:  'maybe',      // Rn — radon gas, indoor radioactivity, lung cancer
-  88:  'maybe',      // Ra — radium, Marie Curie, historical radioactivity
-  90:  'maybe',      // Th — thorium, nuclear fuel, Welsbach gas mantles
-  92:  'good',       // U  — nuclear fission, U-235, uranium hexafluoride
-  94:  'maybe',      // Pu — plutonium, nuclear weapons, nuclear power
-  95:  'maybe',      // Am — americium in smoke detectors (Am-241)
+  1:   'know',   // H  — acids, water, gases, everything
+  2:   'know',   // He — noble gas, electron configuration
+  3:   'know',   // Li — Group 1 example, lithium batteries
+  4:   'know',   // Be — BeCl₂ (linear, exception to octet rule)
+  5:   'know',   // B  — BF₃ (Lewis acid, trigonal planar)
+  6:   'know',   // C  — organic intro, CO₂, carbonates
+  7:   'know',   // N  — N₂, ammonia synthesis, nitrates
+  8:   'know',   // O  — oxidation states, combustion, water
+  9:   'know',   // F  — most electronegative, HF acid
+  10:  'know',   // Ne — noble gas, periodic trends
+  11:  'know',   // Na — NaOH, NaCl, sodium chemistry
+  12:  'know',   // Mg — Mg²⁺, Group 2 example
+  13:  'know',   // Al — amphoteric oxide, metals/alloys
+  14:  'know',   // Si — SiO₂, semiconductors, silicates
+  15:  'know',   // P  — phosphates, PCl₅, Lewis structures
+  16:  'know',   // S  — H₂SO₄, S₈, sulfuric acid
+  17:  'know',   // Cl — Cl₂, HCl, halogens, chloride ions
+  18:  'know',   // Ar — noble gas, inert atmosphere
+  19:  'know',   // K  — K⁺, potassium salts, Group 1
+  20:  'know',   // Ca — CaCO₃, hard water, Ca²⁺
+  21:  'maybe',  // Sc — first d-block element, periodic trends
+  22:  'know',   // Ti — TiO₂ (white paint), transition metal
+  23:  'know',   // V  — multiple oxidation states, vanadium catalyst
+  24:  'know',   // Cr — chromate/dichromate redox; Cr²⁺/³⁺/⁶⁺
+  25:  'know',   // Mn — KMnO₄ (lab reagent), permanganate redox
+  26:  'know',   // Fe — Fe²⁺/³⁺, rust, steel, hemoglobin
+  27:  'know',   // Co — Co²⁺/³⁺, crystal field theory, cobalt blue
+  28:  'know',   // Ni — Ni²⁺, electroplating, Ni-Cd battery
+  29:  'know',   // Cu — Cu⁺/²⁺, electrochemistry demo, copper wire
+  30:  'know',   // Zn — Zn²⁺, galvanic cells, zinc battery
+  31:  'know',   // Ga — semiconductor, melts at body temperature
+  32:  'maybe',  // Ge — semiconductor, Mendeleev's eka-silicon prediction
+  33:  'know',   // As — arsenic poisoning, metalloid
+  34:  'know',   // Se — trace element, metalloid
+  35:  'know',   // Br — Br₂ (liquid halogen), HBr, bromides
+  36:  'know',   // Kr — noble gas, periodic trends
+  37:  'know',   // Rb — Group 1 periodic trends
+  38:  'know',   // Sr — flame tests (crimson), Group 2
+  39:  'maybe',  // Y  — ytterite minerals, periodic trends
+  40:  'maybe',  // Zr — ZrO₂ ceramics, nuclear reactor cladding
+  41:  'maybe',  // Nb — superconductors, niobium alloys
+  42:  'maybe',  // Mo — multiple oxidation states, MoS₂ lubricant
+  43:  'maybe',  // Tc — first synthetic element; Mendeleev gap; nuclear medicine
+  44:  'maybe',  // Ru — catalysts, platinum group
+  45:  'maybe',  // Rh — catalytic converters, platinum group
+  46:  'maybe',  // Pd — H₂ absorption, cross-coupling catalysis
+  47:  'know',   // Ag — Ag⁺, AgNO₃, Ksp reactions, photography
+  48:  'know',   // Cd — CdS (quantum dots, pigment), Ni-Cd battery
+  49:  'maybe',  // In — indium tin oxide (ITO)
+  50:  'know',   // Sn — Sn²⁺/⁴⁺, tin cans, solder, allotropes of tin
+  51:  'maybe',  // Sb — flame retardants, antimony compounds
+  52:  'maybe',  // Te — thermoelectrics, telluride compounds
+  53:  'know',   // I  — I₂ crystals, HI, halogens, iodides
+  54:  'know',   // Xe — noble gas, XeF₄ (exceptions to octet rule)
+  55:  'know',   // Cs — atomic clock, Group 1 periodic trends
+  56:  'know',   // Ba — Ba²⁺, BaSO₄ (insoluble salt), flame tests
+  57:  'maybe',  // La — lanthanide series intro
+  58:  'forget', // Ce — lanthanide
+  60:  'maybe',  // Nd — Nd magnets (strongest permanent magnets)
+  63:  'forget', // Eu — lanthanide
+  64:  'forget', // Gd — lanthanide
+  72:  'forget', // Hf — too specialized for gen chem
+  73:  'forget', // Ta — too specialized for gen chem
+  74:  'maybe',  // W  — tungsten filament, highest melting point of metals
+  78:  'know',   // Pt — platinum electrode, catalytic converter
+  79:  'know',   // Au — noble metal, electrochemistry, gold leaf
+  80:  'know',   // Hg — liquid metal, barometer, thermometer (historical)
+  81:  'forget', // Tl — too rare/specialized for gen chem
+  82:  'know',   // Pb — Pb-acid battery, historical toxicology, alloys
+  83:  'maybe',  // Bi — Pepto-Bismol, low-toxicity heavy metal
+  84:  'forget', // Po — too specialized for gen chem
+  86:  'maybe',  // Rn — radon gas, indoor radioactivity, lung cancer
+  88:  'maybe',  // Ra — radium, Marie Curie, historical radioactivity
+  90:  'maybe',  // Th — thorium, nuclear fuel, Welsbach gas mantles
+  92:  'know',   // U  — nuclear fission, U-235, uranium hexafluoride
+  94:  'maybe',  // Pu — plutonium, nuclear weapons, nuclear power
+  95:  'forget', // Am — too specialized for gen chem
 };
 
 const GEN_CHEM_COLORS = {
-  definitely: PALETTE.green,
-  good:       PALETTE.teal,
-  maybe:      PALETTE.yellow,
-  forget:     PALETTE.grey,
+  know:   PALETTE.green,
+  maybe:  PALETTE.yellow,
+  forget: PALETTE.grey,
 };
 
 const GEN_CHEM_LABELS = {
-  definitely: 'Definitely Know',
-  good:       'Good to Know',
-  maybe:      'Maybe',
-  forget:     'Forget It',
+  know:   'Know It',
+  maybe:  'Maybe',
+  forget: 'Forget It',
 };
 
 const GEN_CHEM_DESCRIPTIONS = {
-  definitely: '75–100% — appears in virtually every gen chem course',
-  good:       '50–75% — likely covered, especially in lab or application topics',
-  maybe:      '25–50% — may appear in nuclear, materials, or specialty sections',
-  forget:     '0–25% — rarely if ever tested in a first-year chemistry course',
+  know:   'Likely to appear in a first-year gen chem course — study this one',
+  maybe:  'May appear in nuclear, materials, or specialty sections',
+  forget: 'Rarely if ever tested in a first-year chemistry course',
 };
 
 // ─── "Natural Habitat" data ───────────────────────────────────────────────────
@@ -655,8 +651,8 @@ const ABUNDANCE_PPM = {
   // Elements 93-118: null (synthetic)
 };
 
-const ABUNDANCE_LOG_MIN = -4;                  // 0.0001 ppm floor
-const ABUNDANCE_LOG_MAX = Math.log10(461000);  // ~5.66
+const ABUNDANCE_LOG_MIN = -7;   // floor for very rare elements by atom count
+const ABUNDANCE_LOG_MAX = 4.5;  // O: 461000 ppm / 16 u ≈ 28,800 → log10 ≈ 4.46
 
 // ─── Layer factories ──────────────────────────────────────────────────────────
 function makeGradientLayer({ id, label, property, unit, scale, description, format }) {
@@ -794,14 +790,15 @@ export const colorLayers = [
   {
     id: 'abundance',
     label: 'Earth Abundance',
-    description: "Abundance in Earth's crust (ppm by mass, log scale) — Yaroshevsky (2006)",
+    description: "Atoms per million atoms in Earth's crust (log scale) — Yaroshevsky (2006)",
     type: 'gradient',
-    unit: 'ppm',
-    min: 0.0001,
-    max: 461000,
+    unit: 'rel. atom count',
+    min: 1e-7,
+    max: 30000,
     getColor(element) {
-      const v = ABUNDANCE_PPM[element.number];
-      if (v == null) return '#1e2535';
+      const massPpm = ABUNDANCE_PPM[element.number];
+      if (massPpm == null || !element.atomicMass) return '#1e2535';
+      const v = massPpm / element.atomicMass;
       const t = (Math.log10(v) - ABUNDANCE_LOG_MIN) / (ABUNDANCE_LOG_MAX - ABUNDANCE_LOG_MIN);
       return interpolateColor(SCALE_COOL_WARM, Math.max(0, Math.min(1, t)));
     },
