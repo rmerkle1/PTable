@@ -5,7 +5,6 @@ import LongFormLayout from './layouts/LongFormLayout';
 import BenfeyLayout from './layouts/BenfeyLayout';
 import AdomahLayout from './layouts/AdomahLayout';
 import ZigguratLayout from './layouts/ZigguratLayout';
-import RibbonLayout from './layouts/RibbonLayout';
 import ElementPanel from './components/ElementPanel';
 import './App.css';
 
@@ -13,9 +12,8 @@ const MODES = [
   { id: 'standard',  label: 'Standard' },
   { id: 'longform',  label: 'Long Form' },
   { id: 'benfey',    label: 'Benfey Spiral' },
-  { id: 'adomah',    label: 'Adomah' },
+  { id: 'adomah',    label: 'Left-Step' },
   { id: 'ziggurat',  label: 'Ziggurat' },
-  { id: 'ribbon',    label: 'Left-Step' },
 ];
 
 function GradientLegend({ layer }) {
@@ -152,14 +150,6 @@ export default function App() {
             selectedElement={selectedElement}
             onSelect={handleSelect}
           />
-        ) : mode === 'ribbon' ? (
-          <div className="overflow-x-auto w-full flex justify-center">
-            <RibbonLayout
-              colorLayer={layer}
-              selectedElement={selectedElement}
-              onSelect={handleSelect}
-            />
-          </div>
         ) : (
           <TableLayout
             colorLayer={layer}

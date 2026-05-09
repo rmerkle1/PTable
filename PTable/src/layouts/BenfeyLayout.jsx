@@ -26,6 +26,17 @@ const RW = G;
 const R0 = 56;
 const S  = G;
 
+// Branch bay gaps: the outer spiral (k=0) has no cells here; branch elements fill inside.
+// For each gap, we draw an outer arc ("bay roof") from the last s-block cell to the first
+// p-block cell — this makes the branch visually look like a bay/peninsula.
+// kDepth = how many k-rows deep the branch goes (d=2, f+d=4, g+f+d=6)
+const BRANCH_BAYS = [
+  { nFrom: 20, nTo: 24, kDepth: 2 },  // Period 4: d-block
+  { nFrom: 33, nTo: 37, kDepth: 2 },  // Period 5: d-block
+  { nFrom: 46, nTo: 52, kDepth: 4 },  // Period 6: f+d
+  { nFrom: 61, nTo: 69, kDepth: 6 },  // Period 7: f+d+g
+];
+
 // ── Geometry ──────────────────────────────────────────────────────────────────
 
 function cellPath(n, k, cx, cy) {
@@ -51,6 +62,38 @@ function cellPath(n, k, cx, cy) {
   const rIn  = f(Math.max(1, rMid - half));
 
   return `M ${x1} ${y1} L ${x2} ${y2} A ${rOut} ${rOut} 0 0 1 ${x3} ${y3} L ${x4} ${y4} A ${rIn} ${rIn} 0 0 0 ${x1} ${y1} Z`;
+}
+
+// Draws a filled "bay" shape for a branch gap.
+// The outer boundary follows the spiral's outer edge (k=0 outer face) across the gap.
+// The inner boundary follows the deepest branch row's inner edge (k=kDepth inner face).
+// This creates a visible enclosed region that the branch cells sit inside —
+// making the gap read as a peninsula/bay rather than empty space.
+function bayFillPath(nFrom, nTo, kDepth, cx, cy) {
+  const nStart = nFrom - 0.5;
+  const nEnd   = nTo   + 0.5;
+  const steps  = Math.ceil((nEnd - nStart) * 10);
+  const f      = v => v.toFixed(2);
+
+  // Outer arc: left→right at outer spiral edge
+  const outer = [];
+  for (let i = 0; i <= steps; i++) {
+    const n     = nStart + (nEnd - nStart) * (i / steps);
+    const theta = -Math.PI / 2 + n * (Math.PI / 4);
+    const r     = R0 + G * n / 8 + RW / 2;
+    outer.push(`${f(cx + r * Math.cos(theta))},${f(cy + r * Math.sin(theta))}`);
+  }
+
+  // Inner arc: right→left at deepest branch inner edge
+  const inner = [];
+  for (let i = 0; i <= steps; i++) {
+    const n     = nEnd - (nEnd - nStart) * (i / steps);  // reversed direction
+    const theta = -Math.PI / 2 + n * (Math.PI / 4);
+    const r     = Math.max(1, R0 + G * n / 8 - kDepth * S - RW / 2);
+    inner.push(`${f(cx + r * Math.cos(theta))},${f(cy + r * Math.sin(theta))}`);
+  }
+
+  return `M ${outer[0]} L ${outer.slice(1).join(' L ')} L ${inner[0]} L ${inner.slice(1).join(' L ')} Z`;
 }
 
 function cellCenter(n, k, cx, cy) {
@@ -153,6 +196,17 @@ export default function BenfeyLayout({ colorLayer, selectedElement, onSelect }) 
         viewBox={`${minX} ${minY} ${vbW} ${vbH}`}
         preserveAspectRatio="xMidYMid meet"
       >
+        {/* Branch bays: filled region behind each gap, making the branch peninsula visible */}
+        {BRANCH_BAYS.map(({ nFrom, nTo, kDepth }) => (
+          <path
+            key={`bay-${nFrom}`}
+            d={bayFillPath(nFrom, nTo, kDepth, cx, cy)}
+            fill="rgba(255,255,255,0.04)"
+            stroke="rgba(255,255,255,0.2)"
+            strokeWidth={0.75}
+          />
+        ))}
+
         {/* G-block placeholder cells (drawn first, appear behind everything) */}
         {G_CELLS.map(({ n, k, label }) => {
           const { x, y } = cellCenter(n, k, cx, cy);
