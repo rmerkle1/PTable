@@ -558,101 +558,104 @@ const HABITAT_DESCRIPTIONS = {
   lab:   'Synthetic — must be created in a nuclear reactor or particle accelerator',
 };
 
-// ─── Earth's crust abundance (ppm by mass) ───────────────────────────────────
-// Source: Yaroshevsky (2006); CRC Handbook of Chemistry and Physics
+// ─── Bulk Earth abundance (ppm by mass) ──────────────────────────────────────
+// Source: McDonough & Sun (1995) Chemical Geology 120, 223-253 (primary);
+//         Allègre et al. (2001) Earth Planet. Sci. Lett. 185, 49-69 (supplementary).
+// Covers entire Earth — crust, mantle, AND core. Fe, Ni, S, Co, Cr dramatically
+// higher than crust-only because they concentrate in the metallic core.
 // Displayed on a log₁₀ scale. Null = no stable isotopes / immeasurably trace.
 
 const ABUNDANCE_PPM = {
-  1:   1400,     // H
-  2:   0.008,    // He
-  3:   20,       // Li
-  4:   2.8,      // Be
-  5:   10,       // B
-  6:   200,      // C
-  7:   19,       // N
-  8:   461000,   // O
-  9:   585,      // F
-  10:  0.005,    // Ne
-  11:  23600,    // Na
-  12:  23300,    // Mg
-  13:  82300,    // Al
-  14:  282000,   // Si
-  15:  1050,     // P
-  16:  350,      // S
-  17:  145,      // Cl
-  18:  3.5,      // Ar
-  19:  20900,    // K
-  20:  41500,    // Ca
-  21:  22,       // Sc
-  22:  5650,     // Ti
-  23:  120,      // V
-  24:  102,      // Cr
-  25:  950,      // Mn
-  26:  56300,    // Fe
-  27:  25,       // Co
-  28:  84,       // Ni
+  1:   260,      // H   — ocean + hydrous minerals; possible core contribution
+  2:   0.008,    // He  — trace (lost to space; replenished by radioactive decay)
+  3:   1.1,      // Li
+  4:   0.05,     // Be
+  5:   0.9,      // B
+  6:   730,      // C   — significant; concentrated in core as carbide/carbon
+  7:   25,       // N
+  8:   297000,   // O   — dominant anion of silicate mantle
+  9:   14,       // F
+  10:  0.005,    // Ne  — trace noble gas
+  11:  1800,     // Na
+  12:  155000,   // Mg  — dominant cation of mantle (olivine, pyroxene)
+  13:  15900,    // Al
+  14:  166000,   // Si  — second most abundant element in Earth
+  15:  2100,     // P   — concentrated in core
+  16:  29000,    // S   — major light element in core
+  17:  17,       // Cl
+  18:  0.003,    // Ar  — trace noble gas
+  19:  240,      // K
+  20:  16700,    // Ca
+  21:  10,       // Sc
+  22:  810,      // Ti
+  23:  880,      // V
+  24:  4700,     // Cr  — abundant in core and mantle
+  25:  1700,     // Mn
+  26:  321000,   // Fe  — most abundant element in Earth (dominates metallic core)
+  27:  880,      // Co  — strongly concentrated in core
+  28:  18100,    // Ni  — major core element; Earth's 5th most abundant
   29:  60,       // Cu
-  30:  70,       // Zn
-  31:  19,       // Ga
-  32:  1.5,      // Ge
-  33:  1.8,      // As
-  34:  0.05,     // Se
-  35:  2.4,      // Br
-  36:  0.0001,   // Kr
-  37:  90,       // Rb
-  38:  370,      // Sr
-  39:  33,       // Y
-  40:  165,      // Zr
-  41:  20,       // Nb
-  42:  1.2,      // Mo
-  44:  0.001,    // Ru
-  45:  0.001,    // Rh
-  46:  0.015,    // Pd
-  47:  0.075,    // Ag
-  48:  0.15,     // Cd
-  49:  0.25,     // In
-  50:  2.3,      // Sn
-  51:  0.2,      // Sb
-  52:  0.001,    // Te
-  53:  0.45,     // I
-  54:  0.00002,  // Xe
-  55:  3,        // Cs
-  56:  425,      // Ba
-  57:  39,       // La
-  58:  66.5,     // Ce
-  59:  9.2,      // Pr
-  60:  41.5,     // Nd
-  62:  7.1,      // Sm
-  63:  2.0,      // Eu
-  64:  6.2,      // Gd
-  65:  1.1,      // Tb
-  66:  5.2,      // Dy
-  67:  1.3,      // Ho
-  68:  3.5,      // Er
-  69:  0.5,      // Tm
-  70:  3.2,      // Yb
-  71:  0.8,      // Lu
-  72:  3,        // Hf
-  73:  2,        // Ta
-  74:  1.25,     // W
-  75:  0.0007,   // Re
-  76:  0.002,    // Os
-  77:  0.001,    // Ir
-  78:  0.005,    // Pt
-  79:  0.004,    // Au
-  80:  0.085,    // Hg
-  81:  0.85,     // Tl
-  82:  14,       // Pb
-  83:  0.025,    // Bi
-  90:  9.6,      // Th
-  91:  1.3,      // Pa
-  92:  2.7,      // U
-  // Tc(43), Pm(61), Po(84), At(85), Rn(86), Fr(87), Ra(88), Ac(89): null (trace/synthetic)
-  // Elements 93-118: null (synthetic)
+  30:  40,       // Zn
+  31:  3.0,      // Ga
+  32:  7.0,      // Ge  — siderophile; concentrated in core
+  33:  1.7,      // As
+  34:  2.8,      // Se  — siderophile; concentrated in core
+  35:  0.05,     // Br
+  36:  0.0001,   // Kr  — trace noble gas
+  37:  0.4,      // Rb
+  38:  15.5,     // Sr
+  39:  2.9,      // Y
+  40:  6.3,      // Zr
+  41:  0.58,     // Nb
+  42:  1.7,      // Mo  — siderophile; higher than crust
+  44:  1.05,     // Ru  — siderophile; mostly in core
+  45:  0.186,    // Rh  — siderophile; mostly in core
+  46:  0.39,     // Pd  — siderophile; mostly in core
+  47:  0.008,    // Ag
+  48:  0.04,     // Cd
+  49:  0.013,    // In
+  50:  0.42,     // Sn
+  51:  0.018,    // Sb
+  52:  0.30,     // Te  — siderophile; mostly in core
+  53:  0.026,    // I
+  54:  0.00002,  // Xe  — trace noble gas
+  55:  0.021,    // Cs
+  56:  5.0,      // Ba
+  57:  0.80,     // La
+  58:  1.68,     // Ce
+  59:  0.25,     // Pr
+  60:  1.25,     // Nd
+  62:  0.41,     // Sm
+  63:  0.15,     // Eu
+  64:  0.55,     // Gd
+  65:  0.10,     // Tb
+  66:  0.67,     // Dy
+  67:  0.15,     // Ho
+  68:  0.44,     // Er
+  69:  0.068,    // Tm
+  70:  0.44,     // Yb
+  71:  0.068,    // Lu
+  72:  0.19,     // Hf
+  73:  0.038,    // Ta
+  74:  0.17,     // W   — siderophile; higher in core
+  75:  0.000188, // Re  — highly siderophile; concentrated in core
+  76:  0.0041,   // Os  — highly siderophile; mostly in core
+  77:  0.0038,   // Ir  — highly siderophile; mostly in core
+  78:  0.0076,   // Pt  — highly siderophile; mostly in core
+  79:  0.00116,  // Au  — highly siderophile; mostly in core
+  80:  0.02,     // Hg
+  81:  0.0035,   // Tl
+  82:  0.23,     // Pb
+  83:  0.0025,   // Bi
+  90:  0.080,    // Th
+  92:  0.020,    // U
+  // Tc(43), Pm(61), Po(84), At(85), Fr(87), Ra(88), Ac(89), Pa(91): null (no stable isotopes)
+  // Rn(86): null (radioactive gas, trace)
+  // Elements 93–118: null (synthetic)
 };
 
 const ABUNDANCE_LOG_MIN = -7;   // floor for very rare elements by atom count
-const ABUNDANCE_LOG_MAX = 4.5;  // O: 461000 ppm / 16 u ≈ 28,800 → log10 ≈ 4.46
+const ABUNDANCE_LOG_MAX = 4.7;  // Fe: 321000 ppm / 55.85 u ≈ 5,748 → log10 ≈ 3.76; O drives scale
 
 // ─── Layer factories ──────────────────────────────────────────────────────────
 function makeGradientLayer({ id, label, property, unit, scale, description, format }) {
@@ -697,6 +700,7 @@ export const colorLayers = [
   },
   {
     id: 'lick',
+    fun: true,
     label: 'Can I Lick It?',
     description: 'Brief contact with pure element — based on ATSDR/NIOSH acute toxicology data. Assumes bulk solid/liquid at STP. Not medical advice.',
     type: 'category',
@@ -719,6 +723,7 @@ export const colorLayers = [
   },
   {
     id: 'boom',
+    fun: true,
     label: 'How to Make it Explode',
     description: 'How to get this element to go boom — educational purposes only',
     type: 'category',
@@ -744,6 +749,7 @@ export const colorLayers = [
   },
   {
     id: 'genchem',
+    fun: true,
     label: 'Gen Chem Relevance',
     description: 'How likely is this element to appear in a first-year general chemistry course?',
     type: 'category',
@@ -765,6 +771,7 @@ export const colorLayers = [
   },
   {
     id: 'habitat',
+    fun: true,
     label: 'Natural Habitat',
     description: 'Where in nature is this element most likely to be found?',
     type: 'category',
@@ -789,8 +796,9 @@ export const colorLayers = [
   },
   {
     id: 'abundance',
+    fun: true,
     label: 'Earth Abundance',
-    description: "Atoms per million atoms in Earth's crust (log scale) — Yaroshevsky (2006)",
+    description: 'Atoms per million atoms in bulk Earth — crust, mantle, and core (log scale) — McDonough & Sun (1995)',
     type: 'gradient',
     unit: 'rel. atom count',
     min: 1e-7,
@@ -799,7 +807,7 @@ export const colorLayers = [
       const massPpm = ABUNDANCE_PPM[element.number];
       if (massPpm == null || !element.atomicMass) return '#1e2535';
       const v = massPpm / element.atomicMass;
-      const t = (Math.log10(v) - ABUNDANCE_LOG_MIN) / (ABUNDANCE_LOG_MAX - ABUNDANCE_LOG_MIN);
+      const t = (Math.log10(v) - ABUNDANCE_LOG_MIN) / (4.7 - ABUNDANCE_LOG_MIN);
       return interpolateColor(SCALE_COOL_WARM, Math.max(0, Math.min(1, t)));
     },
     getLegendColor(t) {
