@@ -660,7 +660,7 @@ const ABUNDANCE_LOG_MAX = 4.7;  // Fe: 321000 ppm / 55.85 u ≈ 5,748 → log10 
 
 // ─── Ionic radius (Shannon 1976, crystal radii, pm) ──────────────────────────
 // Most common oxidation state; CN=6 (octahedral) where available.
-// Non-metals listed as their common anion (e.g. O²⁻, F⁻, Cl⁻).
+// Non-metals listed as their most common anion (e.g. O²⁻, F⁻, P³⁻, As³⁻, Cl⁻).
 // Noble gases and most synthetic elements (Z > 98) omitted — no stable ions.
 
 const IONIC_RADIUS = {
@@ -675,7 +675,7 @@ const IONIC_RADIUS = {
   12:  72,      // Mg2+
   13:  53.5,    // Al3+
   14:  40,      // Si4+
-  15:  44,      // P5+
+  15: 212,      // P3-
   16: 184,      // S2-
   17: 181,      // Cl-
   19: 138,      // K+
@@ -692,7 +692,7 @@ const IONIC_RADIUS = {
   30:  74,      // Zn2+
   31:  62,      // Ga3+
   32:  53,      // Ge4+
-  33:  58,      // As3+
+  33: 222,      // As3-
   34: 198,      // Se2-
   35: 196,      // Br-
   37: 152,      // Rb+
@@ -757,7 +757,7 @@ const IONIC_RADIUS = {
 };
 
 const IONIC_RADIUS_MIN = 1;
-const IONIC_RADIUS_MAX = 221; // Te2-
+const IONIC_RADIUS_MAX = 222; // As3-
 
 // ─── Layer factories ──────────────────────────────────────────────────────────
 function makeGradientLayer({ id, label, property, unit, scale, description, format }) {
@@ -945,7 +945,7 @@ export const colorLayers = [
   {
     id: 'ionicRadius',
     label: 'Ionic Radius',
-    description: 'Crystal ionic radius (pm) — Shannon (1976). Most common oxidation state, CN=6 where applicable. Anion radii used for non-metals (O²⁻, F⁻, Cl⁻, etc.).',
+    description: 'Crystal ionic radius (pm) — Shannon (1976). Most common ion; CN=6 where available. Anion radii for non-metals (e.g. O²⁻, F⁻, P³⁻, S²⁻, Cl⁻, As³⁻, I⁻).',
     type: 'gradient',
     unit: 'pm',
     min: IONIC_RADIUS_MIN,
