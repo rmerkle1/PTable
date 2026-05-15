@@ -658,6 +658,51 @@ const ABUNDANCE_PPM = {
 const ABUNDANCE_LOG_MIN = -7;   // floor for very rare elements by atom count
 const ABUNDANCE_LOG_MAX = 4.7;  // Fe: 321000 ppm / 55.85 u ≈ 5,748 → log10 ≈ 3.76; O drives scale
 
+// ─── Human body abundance (ppm by mass) ──────────────────────────────────────
+// Average adult human body elemental composition.
+// Sources: Emsley "The Elements" (2011); WHO/IUPAC trace element references;
+//          Frieden (1972) "The Chemical Elements of Life"; various biochemistry refs.
+// Major elements as % converted to ppm. Trace values from literature ranges.
+// Elements absent or below detection limit omitted (shown as no-data).
+
+const HUMAN_ABUNDANCE_PPM = {
+  1:  100000,  // H  — 10.0%  (water + all organic molecules)
+  3:    0.031, // Li — ultra-trace (present in tissues; not essential)
+  5:    0.7,   // B  — trace (may support bone health)
+  6:  180000,  // C  — 18.0%  (backbone of all biomolecules)
+  7:   30000,  // N  — 3.0%   (proteins, nucleic acids, neurotransmitters)
+  8:  650000,  // O  — 65.0%  (water, biomolecules, hydroxyapatite)
+  9:     37,   // F  — 37 ppm (tooth enamel, bone mineral)
+  11:   1500,  // Na — 0.15%  (extracellular electrolyte, nerve signaling)
+  12:    500,  // Mg — 0.05%  (ATP cofactor, bone)
+  13:    0.9,  // Al — trace  (environmental accumulation; not essential)
+  14:     20,  // Si — 20 ppm (connective tissue, collagen crosslinks)
+  15:  10000,  // P  — 1.0%   (ATP, DNA/RNA backbone, bones, phospholipids)
+  16:   2500,  // S  — 0.25%  (cysteine, methionine, disulfide bonds, CoA)
+  17:   1500,  // Cl — 0.15%  (stomach acid HCl, electrolyte balance)
+  19:   3500,  // K  — 0.35%  (primary intracellular cation)
+  20:  15000,  // Ca — 1.5%   (bones, teeth, muscle contraction, signaling)
+  23:    0.1,  // V  — ultra-trace (possibly essential; insulin-mimetic)
+  24:   0.03,  // Cr — ultra-trace (glucose metabolism)
+  25:    0.2,  // Mn — ultra-trace (enzyme cofactor: arginase, SOD)
+  26:     60,  // Fe — 60 ppm (hemoglobin, myoglobin, cytochromes)
+  27:   0.021, // Co — ultra-trace (cobalt in vitamin B12 center)
+  28:    0.1,  // Ni — ultra-trace (possibly essential at very low levels)
+  29:      1,  // Cu — 1 ppm  (cytochrome c oxidase, superoxide dismutase)
+  30:     33,  // Zn — 33 ppm (cofactor in >300 enzymes; immune function)
+  33:   0.013, // As — ultra-trace (toxic at higher doses; trace found in tissues)
+  34:   0.05,  // Se — ultra-trace (selenoproteins, glutathione peroxidase)
+  35:    2.9,  // Br — 2.9 ppm (ubiquitous in tissues; possibly essential for ECM)
+  37:    4.6,  // Rb — 4.6 ppm (not essential; substitutes K in muscle)
+  38:    3.6,  // Sr — 3.6 ppm (not essential; substitutes Ca in bone)
+  42:    0.1,  // Mo — ultra-trace (xanthine oxidase, sulfite oxidase)
+  53:    0.2,  // I  — ultra-trace (thyroid hormones T3 and T4)
+  56:   0.31,  // Ba — ultra-trace (present in bone; not essential)
+};
+
+const HUMAN_LOG_MIN = -2;   // 0.01 ppm lower display floor
+const HUMAN_LOG_MAX = 5.81; // log10(650000) — oxygen dominates
+
 // ─── Ionic radius (Shannon 1976, crystal radii, pm) ──────────────────────────
 // Most common oxidation state; CN=6 (octahedral) where available.
 // Non-metals listed as their most common anion (e.g. O²⁻, F⁻, P³⁻, As³⁻, Cl⁻).
@@ -793,7 +838,10 @@ function makeGradientLayer({ id, label, property, unit, scale, description, form
 }
 
 // ─── All layers ───────────────────────────────────────────────────────────────
+// Properties: alphabetical, with Category first (default).
+// Fun: alphabetical.
 export const colorLayers = [
+  // ── Properties ──────────────────────────────────────────────────────────────
   {
     id: 'category',
     label: 'Category',
@@ -809,170 +857,6 @@ export const colorLayers = [
       return CATEGORY_LABELS[element.category] ?? element.category;
     },
   },
-  {
-    id: 'lick',
-    fun: true,
-    label: 'Can I Lick It?',
-    description: 'Brief contact with pure element — based on ATSDR/NIOSH acute toxicology data. Assumes bulk solid/liquid at STP. Not medical advice.',
-    type: 'category',
-    legendItems: Object.entries(LICK_LABELS).map(([key, label]) => ({
-      key, label, color: LICK_COLORS[key], description: LICK_DESCRIPTIONS[key],
-    })),
-    getColor(element) {
-      const rating = LICK[element.number] ?? 'unknown';
-      return LICK_COLORS[rating];
-    },
-    getRating(element) {
-      return LICK[element.number] ?? 'unknown';
-    },
-    getRatingLabel(element) {
-      return LICK_LABELS[LICK[element.number] ?? 'unknown'];
-    },
-    getRatingDescription(element) {
-      return LICK_DESCRIPTIONS[LICK[element.number] ?? 'unknown'];
-    },
-    getDisplayValue(element) {
-      return LICK_LABELS[LICK[element.number] ?? 'unknown'];
-    },
-  },
-  {
-    id: 'boom',
-    fun: true,
-    label: 'How to Make it Explode',
-    description: 'How to get this element to go boom — educational purposes only',
-    type: 'category',
-    legendItems: Object.entries(BOOM_LABELS).map(([key, label]) => ({
-      key, label, color: BOOM_COLORS[key], description: BOOM_DESCRIPTIONS[key],
-    })),
-    getColor(element) {
-      const rating = BOOM[element.number] ?? 'stable';
-      return BOOM_COLORS[rating];
-    },
-    getRating(element) {
-      return BOOM[element.number] ?? 'stable';
-    },
-    getRatingLabel(element) {
-      return BOOM_LABELS[BOOM[element.number] ?? 'stable'];
-    },
-    getRatingDescription(element) {
-      return BOOM_DESCRIPTIONS[BOOM[element.number] ?? 'stable'];
-    },
-    getDisplayValue(element) {
-      return BOOM_LABELS[BOOM[element.number] ?? 'stable'];
-    },
-  },
-  {
-    id: 'genchem',
-    fun: true,
-    label: 'Gen Chem Relevance',
-    description: 'How likely is this element to appear in a first-year general chemistry course?',
-    type: 'category',
-    legendItems: Object.entries(GEN_CHEM_LABELS).map(([key, label]) => ({
-      key, label, color: GEN_CHEM_COLORS[key], description: GEN_CHEM_DESCRIPTIONS[key],
-    })),
-    getColor(element) {
-      return GEN_CHEM_COLORS[GEN_CHEM[element.number] ?? 'forget'];
-    },
-    getRating(element) {
-      return GEN_CHEM[element.number] ?? 'forget';
-    },
-    getRatingLabel(element) {
-      return GEN_CHEM_LABELS[GEN_CHEM[element.number] ?? 'forget'];
-    },
-    getRatingDescription(element) {
-      return GEN_CHEM_DESCRIPTIONS[GEN_CHEM[element.number] ?? 'forget'];
-    },
-    getDisplayValue(element) {
-      return GEN_CHEM_LABELS[GEN_CHEM[element.number] ?? 'forget'];
-    },
-  },
-  {
-    id: 'habitat',
-    fun: true,
-    label: 'Natural Habitat',
-    description: 'Where in nature is this element most likely to be found?',
-    type: 'category',
-    legendItems: Object.entries(HABITAT_LABELS).map(([key, label]) => ({
-      key, label, color: HABITAT_COLORS[key], description: HABITAT_DESCRIPTIONS[key],
-    })),
-    getColor(element) {
-      const r = element.number >= 93 ? 'lab' : (HABITAT[element.number] ?? 'rock');
-      return HABITAT_COLORS[r];
-    },
-    getRating(element) {
-      return element.number >= 93 ? 'lab' : (HABITAT[element.number] ?? 'rock');
-    },
-    getRatingLabel(element) {
-      const r = element.number >= 93 ? 'lab' : (HABITAT[element.number] ?? 'rock');
-      return HABITAT_LABELS[r];
-    },
-    getRatingDescription(element) {
-      const r = element.number >= 93 ? 'lab' : (HABITAT[element.number] ?? 'rock');
-      return HABITAT_DESCRIPTIONS[r];
-    },
-    getDisplayValue(element) {
-      const r = element.number >= 93 ? 'lab' : (HABITAT[element.number] ?? 'rock');
-      return HABITAT_LABELS[r];
-    },
-  },
-  {
-    id: 'abundance',
-    fun: true,
-    label: 'Earth Abundance',
-    description: 'Atoms per million atoms in bulk Earth — crust, mantle, and core (log scale) — McDonough & Sun (1995)',
-    type: 'gradient',
-    unit: 'rel. atom count',
-    min: 1e-7,
-    max: 30000,
-    getColor(element) {
-      const massPpm = ABUNDANCE_PPM[element.number];
-      if (massPpm == null || !element.atomicMass) return '#1e2535';
-      const v = massPpm / element.atomicMass;
-      const t = (Math.log10(v) - ABUNDANCE_LOG_MIN) / (4.7 - ABUNDANCE_LOG_MIN);
-      return interpolateColor(SCALE_COOL_WARM, Math.max(0, Math.min(1, t)));
-    },
-    getLegendColor(t) {
-      return interpolateColor(SCALE_COOL_WARM, t);
-    },
-    getDisplayValue(element) {
-      const massPpm = ABUNDANCE_PPM[element.number];
-      if (massPpm == null) return null;
-      return massPpm >= 1000
-        ? `${(massPpm / 1000).toFixed(1)}k ppm`
-        : `${massPpm} ppm`;
-    },
-  },
-  {
-    id: 'ionicRadius',
-    label: 'Ionic Radius',
-    description: 'Crystal ionic radius (pm) — Shannon (1976). Most common ion; CN=6 where available. Anion radii for non-metals (e.g. O²⁻, F⁻, P³⁻, S²⁻, Cl⁻, As³⁻, I⁻).',
-    type: 'gradient',
-    unit: 'pm',
-    min: IONIC_RADIUS_MIN,
-    max: IONIC_RADIUS_MAX,
-    getColor(element) {
-      const v = IONIC_RADIUS[element.number];
-      if (v == null) return '#1e2535';
-      const t = (v - IONIC_RADIUS_MIN) / (IONIC_RADIUS_MAX - IONIC_RADIUS_MIN);
-      return interpolateColor(SCALE_COOL_WARM, Math.max(0, Math.min(1, t)));
-    },
-    getLegendColor(t) {
-      return interpolateColor(SCALE_COOL_WARM, t);
-    },
-    getDisplayValue(element) {
-      const v = IONIC_RADIUS[element.number];
-      return v != null ? `${v} pm` : null;
-    },
-  },
-  makeGradientLayer({
-    id: 'electronegativity',
-    label: 'Electronegativity',
-    description: 'Pauling scale',
-    property: 'electronegativity',
-    unit: '',
-    scale: SCALE_VIVID,
-    format: v => v?.toFixed(2) ?? '—',
-  }),
   makeGradientLayer({
     id: 'atomicMass',
     label: 'Atomic Mass',
@@ -983,13 +867,13 @@ export const colorLayers = [
     format: v => v?.toFixed(3) ?? '—',
   }),
   makeGradientLayer({
-    id: 'meltingPoint',
-    label: 'Melting Point',
-    description: 'Melting point in Kelvin',
-    property: 'meltingPoint',
-    unit: 'K',
-    scale: SCALE_HEAT,
-    format: v => v != null ? `${v.toFixed(0)} K` : '—',
+    id: 'atomicRadius',
+    label: 'Atomic Radius',
+    description: 'Van der Waals radius (pm) — Alvarez (2013) Dalton Trans. 42, 8617',
+    property: 'atomicRadius',
+    unit: 'pm',
+    scale: SCALE_COOL_WARM,
+    format: v => v != null ? `${v} pm` : '—',
   }),
   makeGradientLayer({
     id: 'boilingPoint',
@@ -1008,24 +892,6 @@ export const colorLayers = [
     unit: 'g/cm³',
     scale: SCALE_DENSITY,
     format: v => v != null ? `${v.toFixed(4)} g/cm³` : '—',
-  }),
-  makeGradientLayer({
-    id: 'ionizationEnergy',
-    label: 'Ionization Energy',
-    description: 'First ionization energy (eV)',
-    property: 'ionizationEnergy',
-    unit: 'eV',
-    scale: SCALE_VIVID,
-    format: v => v != null ? `${v.toFixed(3)} eV` : '—',
-  }),
-  makeGradientLayer({
-    id: 'atomicRadius',
-    label: 'Atomic Radius',
-    description: 'Van der Waals radius (pm) — Alvarez (2013) Dalton Trans. 42, 8617',
-    property: 'atomicRadius',
-    unit: 'pm',
-    scale: SCALE_COOL_WARM,
-    format: v => v != null ? `${v} pm` : '—',
   }),
   makeGradientLayer({
     id: 'electronAffinity',
@@ -1091,6 +957,216 @@ export const colorLayers = [
         'normal':    'Normal',
       };
       return labels[ELECTRON_ANOMALIES[element.number] ?? 'normal'];
+    },
+  },
+  makeGradientLayer({
+    id: 'electronegativity',
+    label: 'Electronegativity',
+    description: 'Pauling scale',
+    property: 'electronegativity',
+    unit: '',
+    scale: SCALE_VIVID,
+    format: v => v?.toFixed(2) ?? '—',
+  }),
+  {
+    id: 'ionicRadius',
+    label: 'Ionic Radius',
+    description: 'Crystal ionic radius (pm) — Shannon (1976). Most common ion; CN=6 where available. Anion radii for non-metals (e.g. O\u00B2\u207B, F\u207B, P\u00B3\u207B, S\u00B2\u207B, Cl\u207B, As\u00B3\u207B, I\u207B).',
+    type: 'gradient',
+    unit: 'pm',
+    min: IONIC_RADIUS_MIN,
+    max: IONIC_RADIUS_MAX,
+    getColor(element) {
+      const v = IONIC_RADIUS[element.number];
+      if (v == null) return '#1e2535';
+      const t = (v - IONIC_RADIUS_MIN) / (IONIC_RADIUS_MAX - IONIC_RADIUS_MIN);
+      return interpolateColor(SCALE_COOL_WARM, Math.max(0, Math.min(1, t)));
+    },
+    getLegendColor(t) {
+      return interpolateColor(SCALE_COOL_WARM, t);
+    },
+    getDisplayValue(element) {
+      const v = IONIC_RADIUS[element.number];
+      return v != null ? `${v} pm` : null;
+    },
+  },
+  makeGradientLayer({
+    id: 'ionizationEnergy',
+    label: 'Ionization Energy',
+    description: 'First ionization energy (eV)',
+    property: 'ionizationEnergy',
+    unit: 'eV',
+    scale: SCALE_VIVID,
+    format: v => v != null ? `${v.toFixed(3)} eV` : '—',
+  }),
+  makeGradientLayer({
+    id: 'meltingPoint',
+    label: 'Melting Point',
+    description: 'Melting point in Kelvin',
+    property: 'meltingPoint',
+    unit: 'K',
+    scale: SCALE_HEAT,
+    format: v => v != null ? `${v.toFixed(0)} K` : '—',
+  }),
+
+  // ── Fun ─────────────────────────────────────────────────────────────────────
+  {
+    id: 'lick',
+    fun: true,
+    label: 'Can I Lick It?',
+    description: 'Brief contact with pure element — based on ATSDR/NIOSH acute toxicology data. Assumes bulk solid/liquid at STP. Not medical advice.',
+    type: 'category',
+    legendItems: Object.entries(LICK_LABELS).map(([key, label]) => ({
+      key, label, color: LICK_COLORS[key], description: LICK_DESCRIPTIONS[key],
+    })),
+    getColor(element) {
+      const rating = LICK[element.number] ?? 'unknown';
+      return LICK_COLORS[rating];
+    },
+    getRating(element) {
+      return LICK[element.number] ?? 'unknown';
+    },
+    getRatingLabel(element) {
+      return LICK_LABELS[LICK[element.number] ?? 'unknown'];
+    },
+    getRatingDescription(element) {
+      return LICK_DESCRIPTIONS[LICK[element.number] ?? 'unknown'];
+    },
+    getDisplayValue(element) {
+      return LICK_LABELS[LICK[element.number] ?? 'unknown'];
+    },
+  },
+  {
+    id: 'abundance',
+    fun: true,
+    label: 'Earth Abundance',
+    description: 'Atoms per million atoms in bulk Earth — crust, mantle, and core (log scale) — McDonough & Sun (1995)',
+    type: 'gradient',
+    unit: 'rel. atom count',
+    min: 1e-7,
+    max: 30000,
+    getColor(element) {
+      const massPpm = ABUNDANCE_PPM[element.number];
+      if (massPpm == null || !element.atomicMass) return '#1e2535';
+      const v = massPpm / element.atomicMass;
+      const t = (Math.log10(v) - ABUNDANCE_LOG_MIN) / (4.7 - ABUNDANCE_LOG_MIN);
+      return interpolateColor(SCALE_COOL_WARM, Math.max(0, Math.min(1, t)));
+    },
+    getLegendColor(t) {
+      return interpolateColor(SCALE_COOL_WARM, t);
+    },
+    getDisplayValue(element) {
+      const massPpm = ABUNDANCE_PPM[element.number];
+      if (massPpm == null) return null;
+      return massPpm >= 1000
+        ? `${(massPpm / 1000).toFixed(1)}k ppm`
+        : `${massPpm} ppm`;
+    },
+  },
+  {
+    id: 'genchem',
+    fun: true,
+    label: 'Gen Chem Relevance',
+    description: 'How likely is this element to appear in a first-year general chemistry course?',
+    type: 'category',
+    legendItems: Object.entries(GEN_CHEM_LABELS).map(([key, label]) => ({
+      key, label, color: GEN_CHEM_COLORS[key], description: GEN_CHEM_DESCRIPTIONS[key],
+    })),
+    getColor(element) {
+      return GEN_CHEM_COLORS[GEN_CHEM[element.number] ?? 'forget'];
+    },
+    getRating(element) {
+      return GEN_CHEM[element.number] ?? 'forget';
+    },
+    getRatingLabel(element) {
+      return GEN_CHEM_LABELS[GEN_CHEM[element.number] ?? 'forget'];
+    },
+    getRatingDescription(element) {
+      return GEN_CHEM_DESCRIPTIONS[GEN_CHEM[element.number] ?? 'forget'];
+    },
+    getDisplayValue(element) {
+      return GEN_CHEM_LABELS[GEN_CHEM[element.number] ?? 'forget'];
+    },
+  },
+  {
+    id: 'boom',
+    fun: true,
+    label: 'How to Make it Explode',
+    description: 'How to get this element to go boom — educational purposes only',
+    type: 'category',
+    legendItems: Object.entries(BOOM_LABELS).map(([key, label]) => ({
+      key, label, color: BOOM_COLORS[key], description: BOOM_DESCRIPTIONS[key],
+    })),
+    getColor(element) {
+      const rating = BOOM[element.number] ?? 'stable';
+      return BOOM_COLORS[rating];
+    },
+    getRating(element) {
+      return BOOM[element.number] ?? 'stable';
+    },
+    getRatingLabel(element) {
+      return BOOM_LABELS[BOOM[element.number] ?? 'stable'];
+    },
+    getRatingDescription(element) {
+      return BOOM_DESCRIPTIONS[BOOM[element.number] ?? 'stable'];
+    },
+    getDisplayValue(element) {
+      return BOOM_LABELS[BOOM[element.number] ?? 'stable'];
+    },
+  },
+  {
+    id: 'humanAbundance',
+    fun: true,
+    label: 'Human Abundance',
+    description: 'Average elemental abundance in the adult human body (ppm by mass, log scale). Essential macroelements to ultra-trace — Emsley (2011) & WHO refs.',
+    type: 'gradient',
+    unit: 'ppm (body mass)',
+    min: 0.01,
+    max: 650000,
+    getColor(element) {
+      const ppm = HUMAN_ABUNDANCE_PPM[element.number];
+      if (ppm == null) return '#1e2535';
+      const t = (Math.log10(ppm) - HUMAN_LOG_MIN) / (HUMAN_LOG_MAX - HUMAN_LOG_MIN);
+      return interpolateColor(SCALE_COOL_WARM, Math.max(0, Math.min(1, t)));
+    },
+    getLegendColor(t) {
+      return interpolateColor(SCALE_COOL_WARM, t);
+    },
+    getDisplayValue(element) {
+      const ppm = HUMAN_ABUNDANCE_PPM[element.number];
+      if (ppm == null) return null;
+      if (ppm >= 10000) return `${(ppm / 10000).toFixed(2)}% body mass`;
+      if (ppm >= 1)     return `${ppm} ppm`;
+      return `${ppm} ppm (ultra-trace)`;
+    },
+  },
+  {
+    id: 'habitat',
+    fun: true,
+    label: 'Natural Habitat',
+    description: 'Where in nature is this element most likely to be found?',
+    type: 'category',
+    legendItems: Object.entries(HABITAT_LABELS).map(([key, label]) => ({
+      key, label, color: HABITAT_COLORS[key], description: HABITAT_DESCRIPTIONS[key],
+    })),
+    getColor(element) {
+      const r = element.number >= 93 ? 'lab' : (HABITAT[element.number] ?? 'rock');
+      return HABITAT_COLORS[r];
+    },
+    getRating(element) {
+      return element.number >= 93 ? 'lab' : (HABITAT[element.number] ?? 'rock');
+    },
+    getRatingLabel(element) {
+      const r = element.number >= 93 ? 'lab' : (HABITAT[element.number] ?? 'rock');
+      return HABITAT_LABELS[r];
+    },
+    getRatingDescription(element) {
+      const r = element.number >= 93 ? 'lab' : (HABITAT[element.number] ?? 'rock');
+      return HABITAT_DESCRIPTIONS[r];
+    },
+    getDisplayValue(element) {
+      const r = element.number >= 93 ? 'lab' : (HABITAT[element.number] ?? 'rock');
+      return HABITAT_LABELS[r];
     },
   },
 ];
