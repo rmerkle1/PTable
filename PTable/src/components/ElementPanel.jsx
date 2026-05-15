@@ -1,4 +1,5 @@
-import { CATEGORY_COLORS, CATEGORY_LABELS, colorLayerById } from '../data/colorLayers';
+import { CATEGORY_COLORS, CATEGORY_LABELS } from '../data/colorLayers';
+import { ELECTRON_CONFIGS } from '../data/electronConfigs';
 
 const PROPS = [
   { key: 'atomicMass',        label: 'Atomic Mass',        fmt: v => `${v} u` },
@@ -11,23 +12,22 @@ const PROPS = [
   { key: 'electronAffinity',  label: 'Electron Affinity',  fmt: v => `${v} eV` },
 ];
 
-const lickLayer = colorLayerById['lick'];
-const boomLayer = colorLayerById['boom'];
-
-export default function ElementPanel({ element, onClose }) {
+export default function ElementPanel({ element, onClose, colorLayer }) {
   if (!element) return null;
 
   const catColor = CATEGORY_COLORS[element.category] ?? '#4f5b6f';
   const catLabel = CATEGORY_LABELS[element.category] ?? element.category;
 
-  const lickRating      = lickLayer.getRating(element);
-  const lickLabel       = lickLayer.getRatingLabel(element);
-  const lickDescription = lickLayer.getRatingDescription(element);
-  const lickColor       = lickLayer.getColor(element);
+  // Dynamic widget: derive display value and description from current color layer
+  const widgetColor       = colorLayer?.getColor(element) ?? catColor;
+  const widgetValue       = colorLayer?.getDisplayValue?.(element) ?? null;
+  const widgetDescription = colorLayer?.getRatingDescription?.(element) ?? null;
+  const widgetTitle       = colorLayer?.label ?? 'Category';
 
-  const boomLabel       = boomLayer.getRatingLabel(element);
-  const boomDescription = boomLayer.getRatingDescription(element);
-  const boomColor       = boomLayer.getColor(element);
+  // If the widget color is the "no data" dark color, treat as no data
+  const hasWidgetData = widgetValue != null && widgetColor !== '#1e2535';
+
+  const electronConfig = ELECTRON_CONFIGS[element.number];
 
   return (
     <div className="fixed right-0 top-0 h-full w-72 bg-gray-900 border-l border-white/10 shadow-2xl flex flex-col z-50 overflow-y-auto">
@@ -50,20 +50,23 @@ export default function ElementPanel({ element, onClose }) {
         </button>
       </div>
 
-      {/* Can I lick it? */}
+      {/* Dynamic layer widget */}
       <div className="mx-4 mt-4 rounded-lg p-3 border"
-           style={{ borderColor: `${lickColor}55`, backgroundColor: `${lickColor}18` }}>
-        <div className="text-[10px] text-white/40 uppercase tracking-widest mb-1">Can I lick it?</div>
-        <div className="text-base font-bold" style={{ color: lickColor }}>{lickLabel}</div>
-        <div className="text-xs text-white/50 mt-1 leading-snug">{lickDescription}</div>
-      </div>
-
-      {/* How to make it explode */}
-      <div className="mx-4 mt-3 rounded-lg p-3 border"
-           style={{ borderColor: `${boomColor}55`, backgroundColor: `${boomColor}18` }}>
-        <div className="text-[10px] text-white/40 uppercase tracking-widest mb-1">How to make it explode</div>
-        <div className="text-base font-bold" style={{ color: boomColor }}>{boomLabel}</div>
-        <div className="text-xs text-white/50 mt-1 leading-snug">{boomDescription}</div>
+           style={{
+             borderColor: hasWidgetData ? `${widgetColor}55` : 'rgba(255,255,255,0.08)',
+             backgroundColor: hasWidgetData ? `${widgetColor}18` : 'rgba(255,255,255,0.03)',
+           }}>
+        <div className="text-[10px] text-white/40 uppercase tracking-widest mb-1">{widgetTitle}</div>
+        {hasWidgetData ? (
+          <>
+            <div className="text-base font-bold" style={{ color: widgetColor }}>{widgetValue}</div>
+            {widgetDescription && (
+              <div className="text-xs text-white/50 mt-1 leading-snug">{widgetDescription}</div>
+            )}
+          </>
+        ) : (
+          <div className="text-sm text-white/25 italic">No data</div>
+        )}
       </div>
 
       {/* Properties */}
@@ -84,6 +87,14 @@ export default function ElementPanel({ element, onClose }) {
           <span className="text-white/40 text-xs">Group / Period</span>
           <span className="text-white/90 text-sm font-mono">
             {element.group ?? '—'} / {element.period}
+          </span>
+        </div>
+
+        {/* Electron configuration */}
+        <div className="flex flex-col gap-0.5 pt-1">
+          <span className="text-white/40 text-xs">Electron Configuration</span>
+          <span className="text-white/80 text-sm font-mono leading-snug">
+            {electronConfig ?? '—'}
           </span>
         </div>
       </div>

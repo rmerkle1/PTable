@@ -1,4 +1,5 @@
 import { elements } from './elements';
+import { ELECTRON_ANOMALIES } from './electronConfigs';
 
 // ─── Brand palette ───────────────────────────────────────────────────────────
 export const PALETTE = {
@@ -657,11 +658,113 @@ const ABUNDANCE_PPM = {
 const ABUNDANCE_LOG_MIN = -7;   // floor for very rare elements by atom count
 const ABUNDANCE_LOG_MAX = 4.7;  // Fe: 321000 ppm / 55.85 u ≈ 5,748 → log10 ≈ 3.76; O drives scale
 
+// ─── Ionic radius (Shannon 1976, crystal radii, pm) ──────────────────────────
+// Most common oxidation state; CN=6 (octahedral) where available.
+// Non-metals listed as their common anion (e.g. O²⁻, F⁻, Cl⁻).
+// Noble gases and most synthetic elements (Z > 98) omitted — no stable ions.
+
+const IONIC_RADIUS = {
+  1:    1,      // H+  (bare proton; crystal radius)
+  3:   76,      // Li+
+  4:   45,      // Be2+
+  5:   27,      // B3+
+  7:  146,      // N3-
+  8:  140,      // O2-
+  9:  133,      // F-
+  11: 102,      // Na+
+  12:  72,      // Mg2+
+  13:  53.5,    // Al3+
+  14:  40,      // Si4+
+  15:  44,      // P5+
+  16: 184,      // S2-
+  17: 181,      // Cl-
+  19: 138,      // K+
+  20: 100,      // Ca2+
+  21:  74.5,    // Sc3+
+  22:  60.5,    // Ti4+
+  23:  64,      // V3+
+  24:  61.5,    // Cr3+
+  25:  83,      // Mn2+
+  26:  55,      // Fe3+
+  27:  74.5,    // Co2+
+  28:  69,      // Ni2+
+  29:  73,      // Cu2+
+  30:  74,      // Zn2+
+  31:  62,      // Ga3+
+  32:  53,      // Ge4+
+  33:  58,      // As3+
+  34: 198,      // Se2-
+  35: 196,      // Br-
+  37: 152,      // Rb+
+  38: 118,      // Sr2+
+  39:  90,      // Y3+
+  40:  72,      // Zr4+
+  41:  64,      // Nb5+
+  42:  65,      // Mo4+
+  43:  64.5,    // Tc4+
+  44:  62,      // Ru4+
+  45:  66.5,    // Rh3+
+  46:  86,      // Pd2+ (CN=4 sq. planar)
+  47: 115,      // Ag+
+  48:  95,      // Cd2+
+  49:  80,      // In3+
+  50:  69,      // Sn4+
+  51:  76,      // Sb3+
+  52: 221,      // Te2-
+  53: 220,      // I-
+  55: 167,      // Cs+
+  56: 135,      // Ba2+
+  57: 103.2,    // La3+
+  58: 101,      // Ce3+
+  59:  99,      // Pr3+
+  60:  98.3,    // Nd3+
+  61:  97,      // Pm3+
+  62:  95.8,    // Sm3+
+  63:  94.7,    // Eu3+
+  64:  93.8,    // Gd3+
+  65:  92.3,    // Tb3+
+  66:  91.2,    // Dy3+
+  67:  90.1,    // Ho3+
+  68:  89,      // Er3+
+  69:  88,      // Tm3+
+  70:  86.8,    // Yb3+
+  71:  86.1,    // Lu3+
+  72:  71,      // Hf4+
+  73:  64,      // Ta5+
+  74:  60,      // W6+
+  75:  63,      // Re4+
+  76:  63,      // Os4+
+  77:  68,      // Ir3+
+  78:  62.5,    // Pt4+
+  79: 137,      // Au+
+  80: 102,      // Hg2+
+  81: 150,      // Tl+
+  82: 119,      // Pb2+
+  83: 103,      // Bi3+
+  84:  97,      // Po4+
+  87: 180,      // Fr+ (estimated)
+  88: 148,      // Ra2+
+  89: 112,      // Ac3+
+  90:  94,      // Th4+
+  91:  90,      // Pa4+
+  92:  89,      // U4+
+  93:  87,      // Np4+
+  94:  86,      // Pu4+
+  95:  97.5,    // Am3+
+  96:  97,      // Cm3+
+  97:  96,      // Bk3+
+  98:  95,      // Cf3+
+};
+
+const IONIC_RADIUS_MIN = 1;
+const IONIC_RADIUS_MAX = 221; // Te2-
+
 // ─── Layer factories ──────────────────────────────────────────────────────────
 function makeGradientLayer({ id, label, property, unit, scale, description, format }) {
   const values = elements.map(e => e[property]).filter(v => v !== null && v !== undefined && isFinite(v));
   const min = Math.min(...values);
   const max = Math.max(...values);
+  const fmt = format || (v => v?.toFixed(2) ?? '—');
 
   return {
     id,
@@ -672,7 +775,7 @@ function makeGradientLayer({ id, label, property, unit, scale, description, form
     unit,
     min,
     max,
-    format: format || (v => v?.toFixed(2) ?? '—'),
+    format: fmt,
     getColor(element) {
       const val = element[property];
       if (val === null || val === undefined || !isFinite(val)) return '#1e2535';
@@ -680,6 +783,11 @@ function makeGradientLayer({ id, label, property, unit, scale, description, form
     },
     getLegendColor(t) {
       return interpolateColor(scale, t);
+    },
+    getDisplayValue(element) {
+      const val = element[property];
+      if (val === null || val === undefined || !isFinite(val)) return null;
+      return fmt(val);
     },
   };
 }
@@ -696,6 +804,9 @@ export const colorLayers = [
     })),
     getColor(element) {
       return CATEGORY_COLORS[element.category] ?? PALETTE.grey;
+    },
+    getDisplayValue(element) {
+      return CATEGORY_LABELS[element.category] ?? element.category;
     },
   },
   {
@@ -720,6 +831,9 @@ export const colorLayers = [
     getRatingDescription(element) {
       return LICK_DESCRIPTIONS[LICK[element.number] ?? 'unknown'];
     },
+    getDisplayValue(element) {
+      return LICK_LABELS[LICK[element.number] ?? 'unknown'];
+    },
   },
   {
     id: 'boom',
@@ -743,8 +857,8 @@ export const colorLayers = [
     getRatingDescription(element) {
       return BOOM_DESCRIPTIONS[BOOM[element.number] ?? 'stable'];
     },
-    getNote(element) {
-      return null; // per-element notes stored in BOOM comments
+    getDisplayValue(element) {
+      return BOOM_LABELS[BOOM[element.number] ?? 'stable'];
     },
   },
   {
@@ -767,6 +881,9 @@ export const colorLayers = [
     },
     getRatingDescription(element) {
       return GEN_CHEM_DESCRIPTIONS[GEN_CHEM[element.number] ?? 'forget'];
+    },
+    getDisplayValue(element) {
+      return GEN_CHEM_LABELS[GEN_CHEM[element.number] ?? 'forget'];
     },
   },
   {
@@ -793,6 +910,10 @@ export const colorLayers = [
       const r = element.number >= 93 ? 'lab' : (HABITAT[element.number] ?? 'rock');
       return HABITAT_DESCRIPTIONS[r];
     },
+    getDisplayValue(element) {
+      const r = element.number >= 93 ? 'lab' : (HABITAT[element.number] ?? 'rock');
+      return HABITAT_LABELS[r];
+    },
   },
   {
     id: 'abundance',
@@ -812,6 +933,35 @@ export const colorLayers = [
     },
     getLegendColor(t) {
       return interpolateColor(SCALE_COOL_WARM, t);
+    },
+    getDisplayValue(element) {
+      const massPpm = ABUNDANCE_PPM[element.number];
+      if (massPpm == null) return null;
+      return massPpm >= 1000
+        ? `${(massPpm / 1000).toFixed(1)}k ppm`
+        : `${massPpm} ppm`;
+    },
+  },
+  {
+    id: 'ionicRadius',
+    label: 'Ionic Radius',
+    description: 'Crystal ionic radius (pm) — Shannon (1976). Most common oxidation state, CN=6 where applicable. Anion radii used for non-metals (O²⁻, F⁻, Cl⁻, etc.).',
+    type: 'gradient',
+    unit: 'pm',
+    min: IONIC_RADIUS_MIN,
+    max: IONIC_RADIUS_MAX,
+    getColor(element) {
+      const v = IONIC_RADIUS[element.number];
+      if (v == null) return '#1e2535';
+      const t = (v - IONIC_RADIUS_MIN) / (IONIC_RADIUS_MAX - IONIC_RADIUS_MIN);
+      return interpolateColor(SCALE_COOL_WARM, Math.max(0, Math.min(1, t)));
+    },
+    getLegendColor(t) {
+      return interpolateColor(SCALE_COOL_WARM, t);
+    },
+    getDisplayValue(element) {
+      const v = IONIC_RADIUS[element.number];
+      return v != null ? `${v} pm` : null;
     },
   },
   makeGradientLayer({
@@ -886,6 +1036,63 @@ export const colorLayers = [
     scale: SCALE_VIVID,
     format: v => v != null ? `${v.toFixed(3)} eV` : '—',
   }),
+  {
+    id: 'abnormalConfig',
+    label: 'Electron Config Anomaly',
+    description: 'Elements whose ground-state configuration deviates from Aufbau/Madelung order — grouped by anomaly type',
+    type: 'category',
+    legendItems: [
+      { key: 'd4-to-d5',  label: 'd\u2074\u2192d\u2075 (half-filled d)',  color: PALETTE.yellow  },
+      { key: 'd9-to-d10', label: 'd\u2079\u2192d\u00B9\u2070 (full d)',     color: PALETTE.teal    },
+      { key: 'd-other',   label: 'Other d anomaly',            color: PALETTE.blue    },
+      { key: 'f-anomaly', label: 'f-block anomaly',            color: PALETTE.purple  },
+      { key: 'normal',    label: 'Normal (Aufbau)',             color: PALETTE.grey    },
+    ],
+    getColor(element) {
+      const type = ELECTRON_ANOMALIES[element.number] ?? 'normal';
+      const colors = {
+        'd4-to-d5':  PALETTE.yellow,
+        'd9-to-d10': PALETTE.teal,
+        'd-other':   PALETTE.blue,
+        'f-anomaly': PALETTE.purple,
+        'normal':    PALETTE.grey,
+      };
+      return colors[type];
+    },
+    getRating(element) {
+      return ELECTRON_ANOMALIES[element.number] ?? 'normal';
+    },
+    getRatingLabel(element) {
+      const labels = {
+        'd4-to-d5':  'd\u2074\u2192d\u2075 Half-fill',
+        'd9-to-d10': 'd\u2079\u2192d\u00B9\u2070 Full-fill',
+        'd-other':   'Other d Anomaly',
+        'f-anomaly': 'f-block Anomaly',
+        'normal':    'Normal (Aufbau)',
+      };
+      return labels[ELECTRON_ANOMALIES[element.number] ?? 'normal'];
+    },
+    getRatingDescription(element) {
+      const descriptions = {
+        'd4-to-d5':  'One s electron promotes to d to achieve the extra stability of a half-filled d\u2075 shell',
+        'd9-to-d10': 'One s electron promotes to d to achieve the extra stability of a fully-filled d\u00B9\u2070 shell',
+        'd-other':   'Irregular d-orbital occupancy not explained by simple half-fill or full-fill rules',
+        'f-anomaly': 'Unexpected mixing of f and d occupancy — common in early lanthanides and actinides due to near-degenerate f/d levels',
+        'normal':    'Follows the standard Aufbau / Madelung filling order',
+      };
+      return descriptions[ELECTRON_ANOMALIES[element.number] ?? 'normal'];
+    },
+    getDisplayValue(element) {
+      const labels = {
+        'd4-to-d5':  'd\u2074\u2192d\u2075 Half-fill',
+        'd9-to-d10': 'd\u2079\u2192d\u00B9\u2070 Full-fill',
+        'd-other':   'Other d Anomaly',
+        'f-anomaly': 'f-block Anomaly',
+        'normal':    'Normal',
+      };
+      return labels[ELECTRON_ANOMALIES[element.number] ?? 'normal'];
+    },
+  },
 ];
 
 export const colorLayerById = Object.fromEntries(colorLayers.map(l => [l.id, l]));

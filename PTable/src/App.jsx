@@ -157,7 +157,7 @@ export default function App() {
       </main>
 
       {/* Element detail panel */}
-      <ElementPanel element={selectedElement} onClose={() => setSelected(null)} />
+      <ElementPanel element={selectedElement} onClose={() => setSelected(null)} colorLayer={layer} />
     </div>
   );
 }
